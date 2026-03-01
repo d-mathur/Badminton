@@ -1066,6 +1066,26 @@ onValue(dbRef, (snapshot) => {
 
 <script>
 /* ══════════════════════════════════════════
+   TAP HELPER — fires once on touch OR click, never both
+══════════════════════════════════════════ */
+function addTapListener(container, selector, cb){
+  let _tapped = false;
+  container.addEventListener('touchend', function(e){
+    const el = e.target.closest(selector);
+    if(!el) return;
+    e.preventDefault();
+    _tapped = true;
+    cb(el);
+    setTimeout(()=>{ _tapped=false; }, 400);
+  }, {passive: false});
+  container.addEventListener('click', function(e){
+    if(_tapped) return;
+    const el = e.target.closest(selector);
+    if(el) cb(el);
+  });
+}
+
+/* ══════════════════════════════════════════
    CONSTANTS
 ══════════════════════════════════════════ */
 const MEMBERS = [
@@ -1563,10 +1583,7 @@ function renderHist(){
   });
   h+='</tbody></table></div>';
   w.innerHTML=h;
-  w.ontouchend = w.onclick = function(e){
-    const btn = e.target.closest('.dbt');
-    if(btn){ e.preventDefault(); delSess(Number(btn.dataset.id)); }
-  };
+  addTapListener(w, '.dbt', (btn) => delSess(Number(btn.dataset.id)));
 }
 function delSess(id){ DB.sessions=DB.sessions.filter(s=>s.id!==id); saveDB(); renderHist(); renderOV(); showToast('Session removed'); }
 
@@ -1610,15 +1627,11 @@ function renderGL(){
     </div>`;
   });
   w.innerHTML=html||'<div class="glng">No guest sessions.</div>';
-  w.ontouchend = w.onclick = function(e){
-    const btn = e.target.closest('.glpb');
-    if(btn){
-      e.preventDefault();
-      const {action, sid, gn, rs} = btn.dataset;
-      if(action==='unpay') unPay(Number(sid), gn);
-      else openPT(Number(sid), gn, Number(rs));
-    }
-  };
+  addTapListener(w, '.glpb', (btn) => {
+    const {action, sid, gn, rs} = btn.dataset;
+    if(action==='unpay') unPay(Number(sid), gn);
+    else openPT(Number(sid), gn, Number(rs));
+  });
 }
 let _ptc=null;
 function openPT(sid,gn,rs){
@@ -1629,10 +1642,7 @@ function openPT(sid,gn,rs){
   ).join('');
   document.getElementById('payToModal').classList.add('open');
   const opts = document.getElementById('payToOpts');
-  opts.ontouchend = opts.onclick = function(e){
-    const el = e.target.closest('.ptoo');
-    if(el){ e.preventDefault(); confirmPT(el.dataset.name); }
-  };
+  addTapListener(opts, '.ptoo', (el) => confirmPT(el.dataset.name));
 }
 function closePT(){ document.getElementById('payToModal').classList.remove('open'); _ptc=null; }
 function confirmPT(name){
@@ -1672,10 +1682,7 @@ function renderSettle(){
   const tp=Object.values(pending).reduce((a,v)=>a+v,0);
   if(tp>0) html+=`<div class="pn" role="alert">⚠ <span class="pna">₹${R(tp)} still pending from guests</span> — mark paid in Guest tab first for accurate settlement.</div>`;
   w.innerHTML=html;
-  w.ontouchend = w.onclick = function(e){
-    const row = e.target.closest('.srow');
-    if(row){ e.preventDefault(); openMM(row.dataset.name); }
-  };
+  addTapListener(w, '.srow', (row) => openMM(row.dataset.name));
   document.getElementById('calcWrap').classList.remove('cw-h');
 }
 
