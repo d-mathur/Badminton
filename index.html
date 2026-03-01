@@ -2,30 +2,54 @@
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<!-- FIX 1: Removed maximum-scale (blocks accessibility zoom, triggers webhint warning) -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Court Points</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-[data-theme="dark"]{--bg:#07090e;--su:#0e1118;--s2:#141720;--s3:#1b1f2b;--bo:#1e2433;--b2:#252c3d;--a:#b8ff3c;--a2:#3cc4ff;--a3:#ff4466;--go:#ffcc44;--or:#ff9f3c;--tx:#dde2f0;--m2:#5c6b88;--m3:#8b9ab8;--sh:0 4px 28px rgba(0,0,0,.5);--gl:rgba(8,10,18,.85);--cal:invert(1);--tac:rgba(184,255,60,.08);}
-[data-theme="light"]{--bg:#eef1f8;--su:#fff;--s2:#f4f6fc;--s3:#e8ecf7;--bo:#d8dff0;--b2:#bec9e0;--a:#3a8500;--a2:#006fa8;--a3:#cc1133;--go:#9a6a00;--or:#c46800;--tx:#1a2040;--m2:#7a8db0;--m3:#4a5880;--sh:0 4px 28px rgba(0,0,0,.09);--gl:rgba(255,255,255,.9);--cal:none;--tac:rgba(58,133,0,.07);}
+/* ── TOKENS ── */
+[data-theme="dark"]{
+  --bg:#07090e;--su:#0e1118;--s2:#141720;--s3:#1b1f2b;
+  --bo:#1e2433;--b2:#252c3d;
+  --a:#b8ff3c;--a2:#3cc4ff;--a3:#ff4466;--go:#ffcc44;--or:#ff9f3c;
+  --tx:#dde2f0;--m2:#5c6b88;--m3:#8b9ab8;
+  --sh:0 4px 28px rgba(0,0,0,.5);--gl:rgba(8,10,18,.85);
+  --cal:invert(1);--tac:rgba(184,255,60,.08);
+}
+[data-theme="light"]{
+  --bg:#eef1f8;--su:#fff;--s2:#f4f6fc;--s3:#e8ecf7;
+  --bo:#d8dff0;--b2:#bec9e0;
+  --a:#3a8500;--a2:#006fa8;--a3:#cc1133;--go:#9a6a00;--or:#c46800;
+  --tx:#1a2040;--m2:#7a8db0;--m3:#4a5880;
+  --sh:0 4px 28px rgba(0,0,0,.09);--gl:rgba(255,255,255,.9);
+  --cal:none;--tac:rgba(58,133,0,.07);
+}
+
+/* ── RESET ── */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;min-height:100dvh;transition:background .25s,color .25s;-webkit-font-smoothing:antialiased;/* FIX: prevent iOS scroll bounce on root */overscroll-behavior:none;}
-/* FIX: iOS momentum scrolling for scrollable areas */
-.mw,.tw,.mdm,.fcm{-webkit-overflow-scrolling:touch;}
-::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:var(--b2);border-radius:4px}
+body{
+  font-family:'Outfit',sans-serif;background:var(--bg);color:var(--tx);
+  min-height:100vh;min-height:100dvh;
+  transition:background .25s,color .25s;
+  -webkit-font-smoothing:antialiased;
+  overscroll-behavior:none;
+}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-thumb{background:var(--b2);border-radius:4px}
 input[type=date]::-webkit-calendar-picker-indicator{filter:var(--cal);cursor:pointer;opacity:.7}
 
-/* FIX 3: Inline styles from lines 346, 348 (margin-top:0 on .sl) → CSS class */
-.sl-notop{margin-top:0!important}
-/* FIX 3: Inline styles from line 414 (form wrapper style) → CSS class */
-.form-inline-wrap{display:flex;gap:8px;margin-top:8px}
-
-/* FIX 2: backdrop-filter — add -webkit- prefix everywhere */
-/* SPLASH */
-#splash{position:fixed;inset:0;z-index:2000;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg);padding:24px;/* iOS safe area */padding-top:max(24px, env(safe-area-inset-top));}
+/* ── SPLASH ── */
+#splash{
+  position:fixed;inset:0;z-index:2000;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:var(--bg);padding:24px;
+  padding-top:max(24px,env(safe-area-inset-top));
+}
 .sdeco{position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#ff4466,#ffcc44,#b8ff3c,#3cc4ff)}
-.scourt{width:110px;height:110px;border:2px solid var(--b2);border-radius:18px;display:flex;align-items:center;justify-content:center;margin-bottom:26px;position:relative;background:var(--su)}
+.scourt{
+  width:110px;height:110px;border:2px solid var(--b2);border-radius:18px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:26px;position:relative;background:var(--su);
+}
 .scourt::before{content:'';position:absolute;width:1px;height:65%;background:var(--b2);left:50%;transform:translateX(-50%)}
 .scourt::after{content:'';position:absolute;height:1px;width:65%;background:var(--b2);top:50%;transform:translateY(-50%)}
 .bir{font-size:42px;z-index:1;position:relative;animation:fl 3s ease-in-out infinite}
@@ -33,56 +57,131 @@ input[type=date]::-webkit-calendar-picker-indicator{filter:var(--cal);cursor:poi
 .slo{font-family:'Bebas Neue';font-size:clamp(40px,9vw,72px);letter-spacing:6px;color:var(--a);line-height:1;text-align:center;margin-bottom:4px}
 .sta{font-family:'JetBrains Mono';font-size:10px;letter-spacing:4px;color:var(--m3);margin-bottom:44px;text-align:center}
 .sbt{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:320px}
-.sbtn{border:none;border-radius:14px;padding:18px;font-family:'Bebas Neue';font-size:20px;letter-spacing:3px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:5px;/* FIX: iOS button tap feedback */-webkit-tap-highlight-color:rgba(0,0,0,0);touch-action:manipulation;}
+.sbtn{
+  border:none;border-radius:14px;padding:18px;
+  font-family:'Bebas Neue';font-size:20px;letter-spacing:3px;
+  cursor:pointer;transition:all .2s;
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+  touch-action:manipulation;
+}
 .si{font-size:22px;font-family:'Outfit'}
-.svb{background:var(--su);color:var(--tx);border:2px solid var(--b2)}.svb:hover{border-color:var(--a2);color:var(--a2);transform:translateY(-2px)}
-.smb{background:var(--a);color:#07090e}.smb:hover{opacity:.88;transform:translateY(-2px)}
+.svb{background:var(--su);color:var(--tx);border:2px solid var(--b2)}
+.svb:hover{border-color:var(--a2);color:var(--a2);transform:translateY(-2px)}
+.smb{background:var(--a);color:#07090e}
+.smb:hover{opacity:.88;transform:translateY(-2px)}
 
-/* LOGIN */
-/* FIX 2: -webkit-backdrop-filter added */
-#loginModal{position:fixed;inset:0;background:rgba(7,9,14,.88);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);z-index:2100;display:none;align-items:center;justify-content:center;padding:20px}
+/* ── LOGIN MODAL ── */
+#loginModal{
+  position:fixed;inset:0;
+  background:rgba(7,9,14,.88);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  z-index:2100;display:none;align-items:center;justify-content:center;padding:20px;
+}
 #loginModal.open{display:flex}
 .lb{background:var(--su);border:1px solid var(--b2);border-radius:20px;padding:32px;width:100%;max-width:360px;box-shadow:var(--sh)}
 .lti{font-family:'Bebas Neue';font-size:28px;letter-spacing:3px;color:var(--go);margin-bottom:3px}
 .lsu{font-family:'JetBrains Mono';font-size:10px;color:var(--m3);margin-bottom:22px}
 .lf{display:flex;flex-direction:column;gap:6px;margin-bottom:13px}
 .lf label{font-family:'JetBrains Mono';font-size:9px;letter-spacing:2px;color:var(--m3)}
-.lf input{background:var(--s2);border:1.5px solid var(--b2);border-radius:10px;color:var(--tx);font-family:'Outfit';font-size:16px;/* FIX iOS: font-size >= 16px prevents auto-zoom on focus */padding:11px 14px;outline:none;transition:border-color .15s;width:100%}
+.lf input{
+  background:var(--s2);border:1.5px solid var(--b2);border-radius:10px;
+  color:var(--tx);font-family:'Outfit';font-size:16px;padding:11px 14px;
+  outline:none;transition:border-color .15s;width:100%;
+  -webkit-appearance:none;appearance:none;
+}
 .lf input:focus{border-color:var(--go)}
 .le{font-family:'JetBrains Mono';font-size:10px;color:var(--a3);min-height:18px;margin-bottom:8px}
 .lb2{display:flex;gap:10px}
-.bcn{flex:1;background:transparent;border:1.5px solid var(--b2);color:var(--m3);border-radius:10px;padding:11px;font-family:'Outfit';font-size:13px;cursor:pointer;transition:all .15s;touch-action:manipulation;}
+.bcn{
+  flex:1;background:transparent;border:1.5px solid var(--b2);color:var(--m3);
+  border-radius:10px;padding:11px;font-family:'Outfit';font-size:13px;
+  cursor:pointer;transition:all .15s;touch-action:manipulation;
+}
 .bcn:hover{border-color:var(--a3);color:var(--a3)}
-.ben{flex:2;background:var(--go);color:#07090e;border:none;border-radius:10px;padding:11px;font-family:'Bebas Neue';font-size:20px;letter-spacing:2px;cursor:pointer;touch-action:manipulation;}.ben:hover{opacity:.88}
+.ben{
+  flex:2;background:var(--go);color:#07090e;border:none;
+  border-radius:10px;padding:11px;font-family:'Bebas Neue';
+  font-size:20px;letter-spacing:2px;cursor:pointer;touch-action:manipulation;
+}
+.ben:hover{opacity:.88}
 
-/* APP */
+/* ── APP SHELL ── */
 #app{display:none;min-height:100vh;min-height:100dvh;flex-direction:column}
 #app.open{display:flex}
-/* FIX 2: -webkit-backdrop-filter added */
-header{border-bottom:1px solid var(--bo);padding:13px 24px;padding-top:max(13px, env(safe-area-inset-top));display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;background:var(--gl);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);z-index:100}
+
+/* ── HEADER ── */
+header{
+  border-bottom:1px solid var(--bo);
+  padding:13px 24px;padding-top:max(13px,env(safe-area-inset-top));
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  position:sticky;top:0;
+  background:var(--gl);
+  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
+  z-index:100;
+}
 .hl{font-family:'Bebas Neue';font-size:21px;letter-spacing:4px;color:var(--a);line-height:1}
 .hls{font-family:'JetBrains Mono';font-size:8px;letter-spacing:2px;color:var(--m3)}
-.hr2{display:flex;align-items:center;gap:9px}
-.ppill{background:var(--su);border:1px solid var(--bo);border-radius:10px;padding:5px 13px;text-align:right;font-family:'JetBrains Mono';font-size:9px;color:var(--m3)}
+.hr2{display:flex;align-items:center;gap:7px;flex-wrap:nowrap}
+.ppill{
+  background:var(--su);border:1px solid var(--bo);border-radius:10px;
+  padding:5px 13px;text-align:right;
+  font-family:'JetBrains Mono';font-size:9px;color:var(--m3);
+}
 .ppill strong{color:var(--a);font-size:17px;display:block;font-family:'Bebas Neue';letter-spacing:1px;line-height:1.1}
 .ppill.low strong{color:var(--a3)}
 .ppill.warn strong{color:var(--go)}
-.ibt{background:var(--su);border:1px solid var(--bo);border-radius:9px;padding:7px 11px;cursor:pointer;font-size:15px;transition:all .2s;color:var(--tx);line-height:1;touch-action:manipulation;}
+.ibt{
+  background:var(--su);border:1px solid var(--bo);border-radius:9px;
+  padding:7px 11px;cursor:pointer;font-size:15px;
+  transition:all .2s;color:var(--tx);line-height:1;touch-action:manipulation;
+}
 .ibt:hover{border-color:var(--a2);transform:scale(1.05)}
-.cbt{background:var(--a);color:#07090e;border:none;border-radius:8px;padding:6px 12px;font-family:'Bebas Neue';font-size:13px;letter-spacing:2px;cursor:pointer;touch-action:manipulation;}.cbt:hover{opacity:.85}
+.cbt{
+  background:var(--a);color:#07090e;border:none;border-radius:8px;
+  padding:6px 12px;font-family:'Bebas Neue';font-size:13px;letter-spacing:2px;
+  cursor:pointer;touch-action:manipulation;
+}
+.cbt:hover{opacity:.85}
+.lout{
+  background:transparent;border:1px solid var(--b2);color:var(--m3);
+  border-radius:8px;padding:6px 11px;font-family:'Bebas Neue';
+  font-size:12px;letter-spacing:2px;cursor:pointer;
+  touch-action:manipulation;transition:all .15s;
+}
+.lout:hover{border-color:var(--a3);color:var(--a3)}
 
-/* TABS */
-.tabs{display:flex;border-bottom:1px solid var(--bo);background:var(--su);padding:0 20px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}.tabs::-webkit-scrollbar{display:none;}
-.tab{font-family:'Bebas Neue';font-size:13px;letter-spacing:3px;padding:12px 20px;cursor:pointer;color:var(--m3);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;white-space:nowrap;touch-action:manipulation;}
-.tab:hover{color:var(--tx)}.tab.active{color:var(--a);border-bottom-color:var(--a);background:var(--tac)}
+/* ── TABS ── */
+.tabs{
+  display:flex;border-bottom:1px solid var(--bo);
+  background:var(--su);padding:0 20px;overflow-x:auto;
+}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{
+  font-family:'Bebas Neue';font-size:13px;letter-spacing:3px;
+  padding:12px 20px;cursor:pointer;color:var(--m3);
+  border-bottom:2px solid transparent;margin-bottom:-1px;
+  transition:all .2s;white-space:nowrap;touch-action:manipulation;
+}
+.tab:hover{color:var(--tx)}
+.tab.active{color:var(--a);border-bottom-color:var(--a);background:var(--tac)}
 .tp{display:none}.tp.active{display:block}
-.mw{flex:1;max-width:1100px;width:100%;margin:0 auto;padding:26px 20px 100px;overflow-y:auto;}
+.mw{
+  flex:1;max-width:1100px;width:100%;margin:0 auto;
+  padding:26px 20px 100px;overflow-y:auto;
+}
 
-/* OVERVIEW */
+/* ── SECTION LABEL ── */
 .sl{font-family:'JetBrains Mono';font-size:9px;letter-spacing:3px;color:var(--m3);margin-bottom:10px;margin-top:20px}
 .sl:first-child{margin-top:0}
+.sl-notop{margin-top:0}
+
+/* ── MEMBER GRID ── */
 .mg{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:11px;margin-bottom:22px}
-.mc{background:var(--su);border:1px solid var(--bo);border-radius:16px;padding:18px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;cursor:pointer;touch-action:manipulation;}
+.mc{
+  background:var(--su);border:1px solid var(--bo);border-radius:16px;
+  padding:18px;position:relative;overflow:hidden;
+  transition:border-color .2s,transform .2s;
+}
 .mc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--a))}
 .mc:hover{border-color:var(--c,var(--a));transform:translateY(-2px)}
 .mcn{font-family:'Bebas Neue';font-size:20px;letter-spacing:2px}
@@ -93,7 +192,13 @@ header{border-bottom:1px solid var(--bo);padding:13px 24px;padding-top:max(13px,
 .mcc strong{color:var(--tx);font-weight:600}
 .bar{margin-top:9px;height:3px;background:var(--bo);border-radius:2px;overflow:hidden}
 .bf{height:100%;background:var(--c,var(--a));border-radius:2px;transition:width .5s}
-.statrow{display:grid;grid-template-columns:repeat(3,1fr) 220px;gap:13px;background:var(--su);border:1px solid var(--bo);border-radius:16px;padding:18px 22px;margin-bottom:26px;align-items:center}
+
+/* ── STAT ROW ── */
+.statrow{
+  display:grid;grid-template-columns:repeat(3,1fr) 220px;gap:13px;
+  background:var(--su);border:1px solid var(--bo);border-radius:16px;
+  padding:18px 22px;margin-bottom:26px;align-items:center;
+}
 .sv{font-family:'Bebas Neue';font-size:32px;line-height:1}
 .svl{font-family:'JetBrains Mono';font-size:9px;color:var(--m3);letter-spacing:1px;margin-top:2px}
 .bbg{background:var(--bo);border-radius:4px;height:8px;overflow:hidden;margin-bottom:5px}
@@ -101,89 +206,196 @@ header{border-bottom:1px solid var(--bo);padding:13px 24px;padding-top:max(13px,
 .bbf.danger{background:linear-gradient(90deg,var(--go),var(--a3))}
 .bbl{font-family:'JetBrains Mono';font-size:10px;color:var(--m3)}
 
-/* CARD */
+/* ── CARD ── */
 .card{background:var(--su);border:1px solid var(--bo);border-radius:16px;padding:22px;margin-bottom:18px}
 .card h2{font-family:'Bebas Neue';font-size:17px;letter-spacing:3px;margin-bottom:16px}
 .cg{color:var(--a)}.cb{color:var(--a2)}.cr{color:var(--a3)}.cgo{color:var(--go)}
 
-/* FORM */
+/* ── FORM ── */
 .fr{display:grid;gap:11px;margin-bottom:12px}
 .fr.c3{grid-template-columns:1fr 1fr 1fr}
 .fg{display:flex;flex-direction:column;gap:5px}
 .fg label{font-family:'JetBrains Mono';font-size:9px;letter-spacing:2px;color:var(--m3)}
-/* FIX iOS: font-size 16px+ prevents zoom-on-focus; -webkit-appearance removes iOS styling */
-input,select{background:var(--s2);border:1px solid var(--b2);border-radius:9px;color:var(--tx);font-family:'Outfit';font-size:16px;padding:10px 12px;outline:none;transition:border-color .15s;width:100%;-webkit-appearance:none;-moz-appearance:none;appearance:none;}
-input:focus,select:focus{border-color:var(--a2)}select option{background:var(--s2)}
-/* FIX: keep date input text readable at 16px */
-input[type=date]{font-size:14px;}
+input,select{
+  background:var(--s2);border:1px solid var(--b2);border-radius:9px;
+  color:var(--tx);font-family:'Outfit';font-size:16px;
+  padding:10px 12px;outline:none;transition:border-color .15s;width:100%;
+  -webkit-appearance:none;appearance:none;
+}
+input:focus,select:focus{border-color:var(--a2)}
+select option{background:var(--s2)}
+input[type=date]{font-size:14px}
 
-.chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px}
-/* FIX 3: user-select → add -webkit-user-select */
-.chip{display:flex;align-items:center;gap:6px;background:var(--s2);border:1.5px solid var(--bo);border-radius:100px;padding:6px 14px;cursor:pointer;font-size:12px;font-weight:500;transition:all .15s;-webkit-user-select:none;-moz-user-select:none;user-select:none;touch-action:manipulation;}
-.chip .dot{width:6px;height:6px;border-radius:50%;background:var(--bo);transition:background .15s;flex-shrink:0}
-.chip.on{border-color:var(--cc,var(--a));color:var(--cc,var(--a))}.chip.on .dot{background:var(--cc,var(--a))}
-.cbox{background:var(--s2);border:1px solid var(--b2);border-radius:11px;padding:13px 15px;font-family:'JetBrains Mono';font-size:11px;margin-bottom:16px;color:var(--m3);line-height:2}
+/* ── COST BOX ── */
+.cbox{
+  background:var(--s2);border:1px solid var(--b2);border-radius:11px;
+  padding:13px 15px;font-family:'JetBrains Mono';font-size:11px;
+  margin-bottom:16px;color:var(--m3);line-height:2;
+}
 .cbox .big{font-family:'Bebas Neue';font-size:25px;color:var(--a);letter-spacing:1px}
-.cbox .pp2{color:var(--a2)}.cbox .warn{color:var(--a3)}
-.cslot{font-size:10px;color:var(--m3);margin-top:3px;opacity:.8}
+.cbox .pp2{color:var(--a2)}
+.cbox .warn{color:var(--a3)}
+.cbox.exhausted{border-color:rgba(255,68,102,.5);background:rgba(255,68,102,.05)}
+.cbox.exhausted .big{color:var(--a3)}
 .crow{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
-/* FIX 3: Replaced inline style on .gar → CSS class */
-.gar{display:flex;gap:8px;margin-top:8px}.gar input{flex:1}
-.bgh{background:transparent;border:1px solid var(--b2);color:var(--m3);border-radius:9px;padding:10px 15px;cursor:pointer;font-family:'Outfit';font-size:12px;white-space:nowrap;transition:all .15s;touch-action:manipulation;}
+.cslot{font-size:10px;color:var(--m3);margin-top:3px;opacity:.8}
+.pool-warn-inline{
+  margin-top:8px;padding:8px 10px;
+  background:rgba(255,68,102,.12);border:1px solid rgba(255,68,102,.3);
+  border-radius:8px;color:var(--a3);font-size:10px;
+}
+
+/* ── CHIPS ── */
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px}
+.chip{
+  display:flex;align-items:center;gap:6px;
+  background:var(--s2);border:1.5px solid var(--bo);border-radius:100px;
+  padding:6px 14px;cursor:pointer;font-size:12px;font-weight:500;
+  transition:all .15s;
+  -webkit-user-select:none;user-select:none;touch-action:manipulation;
+}
+.chip .dot{width:6px;height:6px;border-radius:50%;background:var(--bo);transition:background .15s;flex-shrink:0}
+.chip.on{border-color:var(--cc,var(--a));color:var(--cc,var(--a))}
+.chip.on .dot{background:var(--cc,var(--a))}
+
+/* ── GUEST AREA ── */
+.gar{display:flex;gap:8px;margin-top:8px}
+.gar input{flex:1}
+.bgh{
+  background:transparent;border:1px solid var(--b2);color:var(--m3);
+  border-radius:9px;padding:10px 15px;cursor:pointer;
+  font-family:'Outfit';font-size:12px;white-space:nowrap;
+  transition:all .15s;touch-action:manipulation;
+}
 .bgh:hover{border-color:var(--a2);color:var(--a2)}
 .gcards{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-.gcard{background:var(--s2);border:1px solid var(--bo);border-radius:11px;padding:11px 13px;font-size:12px;display:flex;flex-direction:column;gap:7px;min-width:180px}
+.gcard{
+  background:var(--s2);border:1px solid var(--bo);border-radius:11px;
+  padding:11px 13px;font-size:12px;
+  display:flex;flex-direction:column;gap:7px;min-width:180px;
+}
 .gct{display:flex;justify-content:space-between;align-items:center}
 .gcn{font-weight:600;color:var(--a3)}
-.gcrm{background:none;border:none;color:var(--m3);cursor:pointer;font-size:14px;transition:color .15s;padding:4px 6px;touch-action:manipulation;}.gcrm:hover{color:var(--a3)}
+.gcrm{
+  background:none;border:none;color:var(--m3);cursor:pointer;
+  font-size:14px;transition:color .15s;padding:4px 6px;touch-action:manipulation;
+}
+.gcrm:hover{color:var(--a3)}
 .ptog{display:flex;gap:4px}
-.po{flex:1;padding:8px 7px;border-radius:7px;border:1px solid var(--bo);background:transparent;color:var(--m3);font-size:10px;cursor:pointer;font-family:'JetBrains Mono';transition:all .15s;text-align:center;touch-action:manipulation;min-height:44px;/* FIX: iOS min touch target */display:flex;align-items:center;justify-content:center;}
+.po{
+  flex:1;padding:8px 7px;border-radius:7px;border:1px solid var(--bo);
+  background:transparent;color:var(--m3);font-size:10px;cursor:pointer;
+  font-family:'JetBrains Mono';transition:all .15s;text-align:center;
+  touch-action:manipulation;min-height:44px;
+  display:flex;align-items:center;justify-content:center;
+}
 .po.now{border-color:var(--go);color:var(--go);background:rgba(255,204,68,.07)}
 .po.later{border-color:var(--a2);color:var(--a2);background:rgba(60,196,255,.06)}
 .gcpl{font-family:'JetBrains Mono';font-size:9px;color:var(--m3);letter-spacing:1px}
 .kc{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;align-items:center}
-.kchip{background:var(--s2);border:1px dashed var(--b2);border-radius:100px;padding:3px 12px;font-size:11px;color:var(--m3);cursor:pointer;transition:all .15s;font-family:'JetBrains Mono';touch-action:manipulation;}
+.kchip{
+  background:var(--s2);border:1px dashed var(--b2);border-radius:100px;
+  padding:3px 12px;font-size:11px;color:var(--m3);cursor:pointer;
+  transition:all .15s;font-family:'JetBrains Mono';touch-action:manipulation;
+}
 .kchip:hover{border-color:var(--a3);color:var(--a3)}
 .lbw{margin-top:20px}
-.bpr{background:var(--a);color:#07090e;border:none;border-radius:9px;padding:12px 28px;font-family:'Bebas Neue';font-size:16px;letter-spacing:2px;cursor:pointer;transition:all .15s;touch-action:manipulation;min-height:44px;}
-.bpr:hover{opacity:.88;transform:translateY(-1px)}.bpr:disabled{opacity:.25;cursor:not-allowed;transform:none}
+.bpr{
+  background:var(--a);color:#07090e;border:none;border-radius:9px;
+  padding:12px 28px;font-family:'Bebas Neue';font-size:16px;letter-spacing:2px;
+  cursor:pointer;transition:all .15s;touch-action:manipulation;min-height:44px;
+}
+.bpr:hover{opacity:.88;transform:translateY(-1px)}
+.bpr:disabled{opacity:.25;cursor:not-allowed;transform:none}
 
-/* HISTORY */
-.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+/* ── HISTORY TABLE ── */
+.tw{overflow-x:auto}
 .stbl{width:100%;border-collapse:collapse;font-size:12px}
-.stbl th{text-align:left;font-family:'JetBrains Mono';font-size:8px;color:var(--m3);letter-spacing:2px;padding:0 10px 10px;border-bottom:1px solid var(--bo)}
+.stbl th{
+  text-align:left;font-family:'JetBrains Mono';font-size:8px;color:var(--m3);
+  letter-spacing:2px;padding:0 10px 10px;border-bottom:1px solid var(--bo);
+}
 .stbl td{padding:10px;border-bottom:1px solid var(--bo);vertical-align:middle}
-.stbl tr:last-child td{border-bottom:none}.stbl tr:hover td{background:var(--s2)}
-.tdd{font-family:'JetBrains Mono';font-size:10px}.tdt{font-family:'JetBrains Mono';font-size:10px;color:var(--m3)}
-.tdc{font-family:'Bebas Neue';font-size:18px;color:var(--a)}.tdp{font-family:'JetBrains Mono';font-size:10px;color:var(--a2)}
-.badge{display:inline-block;background:var(--s2);border:1px solid var(--bo);border-radius:100px;padding:2px 8px;font-size:9px;margin:2px;font-family:'JetBrains Mono'}
-.badge.gn{color:var(--go);border-color:rgba(255,204,68,.3)}.badge.ge{color:var(--a2);border-color:rgba(60,196,255,.25)}
-.dbt{background:none;border:1px solid transparent;color:var(--m3);cursor:pointer;border-radius:6px;padding:8px 10px;font-size:13px;transition:all .15s;touch-action:manipulation;min-height:44px;min-width:44px;}
+.stbl tr:last-child td{border-bottom:none}
+.stbl tr:hover td{background:var(--s2)}
+.tdd{font-family:'JetBrains Mono';font-size:10px}
+.tdt{font-family:'JetBrains Mono';font-size:10px;color:var(--m3)}
+.thr{font-family:'JetBrains Mono';font-size:10px}
+.tdc{font-family:'Bebas Neue';font-size:18px;color:var(--a)}
+.tdp{font-family:'JetBrains Mono';font-size:10px;color:var(--a2)}
+.badge{
+  display:inline-block;background:var(--s2);border:1px solid var(--bo);
+  border-radius:100px;padding:2px 8px;font-size:9px;margin:2px;font-family:'JetBrains Mono';
+}
+.badge.gn{color:var(--go);border-color:rgba(255,204,68,.3)}
+.badge.ge{color:var(--a2);border-color:rgba(60,196,255,.25)}
+.dbt{
+  background:none;border:1px solid transparent;color:var(--m3);cursor:pointer;
+  border-radius:6px;padding:8px 10px;font-size:13px;
+  transition:all .15s;touch-action:manipulation;min-height:44px;min-width:44px;
+}
 .dbt:hover{border-color:var(--a3);color:var(--a3)}
 .empty{text-align:center;padding:44px;color:var(--m3);font-family:'JetBrains Mono';font-size:11px}
 .empty big{display:block;font-size:34px;margin-bottom:8px}
 
-/* GUESTS */
-.intro{font-size:12px;color:var(--m3);margin-bottom:14px;line-height:1.7}.intro strong{color:var(--tx)}
+/* ── GUEST LEDGER ── */
+.intro{font-size:12px;color:var(--m3);margin-bottom:14px;line-height:1.7}
+.intro strong{color:var(--tx)}
 .glr{background:var(--s2);border:1px solid var(--bo);border-radius:13px;padding:15px 18px;margin-bottom:9px}
 .glt{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;flex-wrap:wrap;gap:6px}
 .gln{font-family:'Bebas Neue';font-size:19px;letter-spacing:2px;color:var(--a3)}
-.glnu .owes{font-family:'Bebas Neue';font-size:19px;color:var(--a3)}
-.glnu .paidl{font-family:'JetBrains Mono';font-size:10px;color:var(--m3)}
-.glsr{display:flex;align-items:center;gap:8px;padding:7px 0;border-top:1px solid var(--bo);font-family:'JetBrains Mono';font-size:10px;flex-wrap:wrap}
-.glsd{color:var(--m3);min-width:54px}.glsi{flex:1;color:var(--m3);min-width:110px}
-.glsa{color:var(--tx);font-weight:600}.gltn{color:var(--go)}.glte{color:var(--a2)}
-.glpb{background:transparent;border:1px solid var(--b2);color:var(--m3);border-radius:7px;padding:6px 11px;font-family:'JetBrains Mono';font-size:9px;cursor:pointer;transition:all .15s;white-space:nowrap;touch-action:manipulation;min-height:36px;}
-.glpb:hover{border-color:var(--a);color:var(--a)}.glpb.paid{border-color:var(--a);color:var(--a)}
-.glco{color:var(--a2);font-size:9px}.glng{font-family:'JetBrains Mono';font-size:11px;color:var(--m3);padding:10px 0}
+.owes{font-family:'Bebas Neue';font-size:19px;color:var(--a3)}
+.paidl{font-family:'JetBrains Mono';font-size:10px;color:var(--m3)}
+.glsr{
+  display:flex;align-items:center;gap:8px;padding:7px 0;
+  border-top:1px solid var(--bo);font-family:'JetBrains Mono';font-size:10px;flex-wrap:wrap;
+}
+.glsd{color:var(--m3);min-width:54px}
+.glsi{flex:1;color:var(--m3);min-width:110px}
+.glsa{color:var(--tx);font-weight:600}
+.gltn{color:var(--go)}.glte{color:var(--a2)}
+.glpb{
+  background:transparent;border:1px solid var(--b2);color:var(--m3);
+  border-radius:7px;padding:6px 11px;font-family:'JetBrains Mono';font-size:9px;
+  cursor:pointer;transition:all .15s;white-space:nowrap;
+  touch-action:manipulation;min-height:36px;
+}
+.glpb:hover{border-color:var(--a);color:var(--a)}
+.glpb.paid{border-color:var(--a);color:var(--a)}
+.glco{color:var(--a2);font-size:9px}
+.glng{font-family:'JetBrains Mono';font-size:11px;color:var(--m3);padding:10px 0}
 
-/* SETTLE TAB */
-.pn{margin-top:14px;padding:12px 15px;background:rgba(255,204,68,.06);border:1px solid rgba(255,204,68,.25);border-radius:11px;font-family:'JetBrains Mono';font-size:11px;color:var(--m3)}
+/* ── POOL BANNER ── */
+.pool-banner{
+  background:rgba(255,204,68,.08);border:1px solid rgba(255,204,68,.35);
+  border-radius:12px;padding:14px 18px;margin-bottom:16px;
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+}
+.pool-banner.hide{display:none}
+.pb-icon{font-size:22px}
+.pb-text{flex:1;font-family:'JetBrains Mono';font-size:11px;color:var(--m3);line-height:1.8}
+.pb-text strong{color:var(--go)}
+.pb-btn{
+  background:var(--go);color:#07090e;border:none;border-radius:8px;
+  padding:8px 18px;font-family:'Bebas Neue';font-size:16px;letter-spacing:2px;
+  cursor:pointer;white-space:nowrap;touch-action:manipulation;
+}
+.pb-btn:hover{opacity:.88}
+
+/* ── SETTLE ── */
+.pn{
+  margin-top:14px;padding:12px 15px;
+  background:rgba(255,204,68,.06);border:1px solid rgba(255,204,68,.25);
+  border-radius:11px;font-family:'JetBrains Mono';font-size:11px;color:var(--m3);
+}
 .pna{color:var(--go)}
 .se{font-family:'JetBrains Mono';font-size:11px;color:var(--m3);padding:12px 0}
-
-/* SETTLE ROWS */
-.srow{display:flex;align-items:center;padding:14px 16px;border-radius:12px;border:1px solid var(--bo);margin-bottom:8px;gap:14px;cursor:pointer;transition:all .2s;background:var(--s2);position:relative;overflow:hidden;touch-action:manipulation;}
+.srow{
+  display:flex;align-items:center;padding:14px 16px;border-radius:12px;
+  border:1px solid var(--bo);margin-bottom:8px;gap:14px;cursor:pointer;
+  transition:all .2s;background:var(--s2);position:relative;overflow:hidden;
+  touch-action:manipulation;
+}
 .srow:hover{border-color:var(--rc,var(--a2));background:var(--s3);transform:translateX(3px)}
 .sra{position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--rc,var(--m3))}
 .snm{font-family:'Bebas Neue';font-size:20px;letter-spacing:1px;min-width:90px}
@@ -195,30 +407,42 @@ input[type=date]{font-size:14px;}
 .c-pay{color:var(--a3)}.c-rcv{color:var(--a)}.c-ev{color:var(--m3)}
 .schev{color:var(--m3);font-size:16px;flex-shrink:0;transition:transform .2s}
 .srow:hover .schev{transform:translateX(3px);color:var(--a2)}
-
-/* FINAL CALC BUTTON */
 .cw{text-align:center;padding:20px 0 4px}
 .cw-h{display:none}
-.bcalc{background:linear-gradient(135deg,var(--go),#ff9f44);color:#07090e;border:none;border-radius:11px;padding:13px 40px;font-family:'Bebas Neue';font-size:22px;letter-spacing:3px;cursor:pointer;transition:all .2s;box-shadow:0 0 28px rgba(255,204,68,.28);touch-action:manipulation;min-height:50px;}
+.bcalc{
+  background:linear-gradient(135deg,var(--go),#ff9f44);color:#07090e;
+  border:none;border-radius:11px;padding:13px 40px;
+  font-family:'Bebas Neue';font-size:22px;letter-spacing:3px;cursor:pointer;
+  transition:all .2s;box-shadow:0 0 28px rgba(255,204,68,.28);
+  touch-action:manipulation;min-height:50px;
+}
 .bcalc:hover{transform:translateY(-2px);box-shadow:0 0 44px rgba(255,204,68,.46)}
 .csub{font-family:'JetBrains Mono';font-size:9px;letter-spacing:3px;color:var(--m3);margin-top:7px}
 
-/* POOL EXHAUSTED BANNER */
-.pool-banner{background:rgba(255,204,68,.08);border:1px solid rgba(255,204,68,.35);border-radius:12px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.pool-banner.hide{display:none}
-.pb-icon{font-size:22px}
-.pb-text{flex:1;font-family:'JetBrains Mono';font-size:11px;color:var(--m3);line-height:1.8}
-.pb-text strong{color:var(--go)}
-.pb-btn{background:var(--go);color:#07090e;border:none;border-radius:8px;padding:8px 18px;font-family:'Bebas Neue';font-size:16px;letter-spacing:2px;cursor:pointer;white-space:nowrap;touch-action:manipulation;}
-.pb-btn:hover{opacity:.88}
-
-/* MODALS */
-/* FIX 2: -webkit-backdrop-filter added */
-.mbg{position:fixed;inset:0;background:rgba(7,9,14,.88);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);z-index:500;display:flex;align-items:center;justify-content:center;padding:18px;opacity:0;pointer-events:none;transition:opacity .25s}
+/* ── MODALS ── */
+.mbg{
+  position:fixed;inset:0;
+  background:rgba(7,9,14,.88);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  z-index:500;display:flex;align-items:center;justify-content:center;
+  padding:18px;opacity:0;pointer-events:none;transition:opacity .25s;
+}
 .mbg.open{opacity:1;pointer-events:all}
-.modal{background:var(--su);border:1px solid var(--b2);border-radius:18px;padding:26px;width:100%;transform:translateY(16px);transition:transform .25s;position:relative;overflow-y:auto;-webkit-overflow-scrolling:touch;box-shadow:var(--sh);/* FIX: safe area inside modals */padding-bottom:max(26px, env(safe-area-inset-bottom));}
+.modal{
+  background:var(--su);border:1px solid var(--b2);border-radius:18px;
+  padding:26px;width:100%;
+  transform:translateY(16px);transition:transform .25s;
+  position:relative;overflow-y:auto;box-shadow:var(--sh);
+  padding-bottom:max(26px,env(safe-area-inset-bottom));
+}
 .mbg.open .modal{transform:translateY(0)}
-.mclose{position:absolute;top:14px;right:15px;background:none;border:none;color:var(--m3);font-size:20px;cursor:pointer;transition:color .15s;line-height:1;padding:8px;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;touch-action:manipulation;}
+.mclose{
+  position:absolute;top:14px;right:15px;
+  background:none;border:none;color:var(--m3);font-size:20px;cursor:pointer;
+  transition:color .15s;line-height:1;padding:8px;
+  min-width:44px;min-height:44px;
+  display:flex;align-items:center;justify-content:center;touch-action:manipulation;
+}
 .mclose:hover{color:var(--tx)}
 .mti{font-family:'Bebas Neue';font-size:23px;letter-spacing:3px;color:var(--go);margin-bottom:3px}
 .mti.sm{font-size:19px}
@@ -227,13 +451,23 @@ input[type=date]{font-size:14px;}
 /* PAY-TO */
 .ptm{max-width:400px}
 .pto{display:flex;flex-direction:column;gap:8px}
-.ptoo{background:var(--s2);border:1px solid var(--bo);border-radius:11px;padding:12px 17px;cursor:pointer;font-family:'Bebas Neue';font-size:18px;letter-spacing:2px;transition:all .15s;display:flex;justify-content:space-between;align-items:center;touch-action:manipulation;min-height:52px;}
-.ptoo:hover{border-color:var(--a);color:var(--a)}.ptoo span{font-family:'JetBrains Mono';font-size:10px;color:var(--m3)}
+.ptoo{
+  background:var(--s2);border:1px solid var(--bo);border-radius:11px;
+  padding:12px 17px;cursor:pointer;font-family:'Bebas Neue';font-size:18px;
+  letter-spacing:2px;transition:all .15s;
+  display:flex;justify-content:space-between;align-items:center;
+  touch-action:manipulation;min-height:52px;
+}
+.ptoo:hover{border-color:var(--a);color:var(--a)}
+.ptoo span{font-family:'JetBrains Mono';font-size:10px;color:var(--m3)}
 
 /* FINAL MODAL */
 .fcm{max-width:700px;max-height:88vh}
 .tsec{margin-bottom:18px}
-.tsl{font-family:'JetBrains Mono';font-size:9px;letter-spacing:3px;color:var(--m3);margin-bottom:9px;padding-bottom:6px;border-bottom:1px solid var(--bo)}
+.tsl{
+  font-family:'JetBrains Mono';font-size:9px;letter-spacing:3px;color:var(--m3);
+  margin-bottom:9px;padding-bottom:6px;border-bottom:1px solid var(--bo);
+}
 .tr{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--bo);flex-wrap:wrap}
 .tr:last-child{border-bottom:none}
 .tf{font-family:'Bebas Neue';font-size:17px;letter-spacing:1px;min-width:80px}
@@ -261,17 +495,31 @@ input[type=date]{font-size:14px;}
 .mt{width:100%;border-collapse:collapse;font-size:11px}
 .mt th{font-family:'JetBrains Mono';font-size:8px;letter-spacing:2px;color:var(--m3);padding:0 8px 7px;border-bottom:1px solid var(--bo);text-align:left}
 .mt td{padding:8px;border-bottom:1px solid var(--bo);vertical-align:middle}
-.mt tr:last-child td{border-bottom:none}.mt tr:hover td{background:var(--s3)}
+.mt tr:last-child td{border-bottom:none}
+.mt tr:hover td{background:var(--s3)}
+.mtd-date{font-family:'JetBrains Mono';font-size:10px}
+.mtd-time{font-family:'JetBrains Mono';font-size:10px;color:var(--m3)}
+.mtd-ppl{font-family:'JetBrains Mono';font-size:10px;color:var(--m3)}
+.mtd-pts{font-family:'Bebas Neue';font-size:15px;color:var(--a)}
+.mtd-rs{font-family:'JetBrains Mono';font-size:10px;color:var(--a2)}
+.mtd-gname{font-family:'Bebas Neue';font-size:14px;letter-spacing:1px;color:var(--a3)}
+.mtd-gdate{font-family:'JetBrains Mono';font-size:10px}
+.mtd-gpaid{font-family:'Bebas Neue';font-size:14px;color:var(--go)}
 
 /* FORMULA BOX */
 .fbox{background:var(--s2);border:1px solid var(--bo);border-radius:12px;padding:16px 18px;margin-bottom:12px}
 .fbox-title{font-family:'JetBrains Mono';font-size:9px;letter-spacing:3px;color:var(--m3);margin-bottom:12px}
-.fline{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px dashed var(--bo);font-family:'JetBrains Mono';font-size:10px}
+.fline{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:5px 0;border-bottom:1px dashed var(--bo);
+  font-family:'JetBrains Mono';font-size:10px;
+}
 .fline:last-child{border-bottom:none;padding-top:10px;margin-top:4px;border-top:2px solid var(--b2)}
 .fline-lbl{color:var(--m3)}
 .fline-val{font-weight:600}
 .fline-total .fline-lbl{font-family:'Bebas Neue';font-size:16px;letter-spacing:2px;color:var(--tx)}
 .fline-total .fline-val{font-family:'Bebas Neue';font-size:28px}
+.fline-step{color:var(--m3)}
 
 /* BALANCE BOX */
 .bb{border-radius:12px;padding:16px 18px;border:1px solid;margin-top:4px}
@@ -280,39 +528,105 @@ input[type=date]{font-size:14px;}
 .bb.ev{background:rgba(255,255,255,.02);border-color:var(--bo)}
 .bbt{font-family:'JetBrains Mono';font-size:9px;letter-spacing:3px;color:var(--m3);margin-bottom:5px}
 .bbv{font-family:'Bebas Neue';font-size:38px;line-height:1}
-.bbd{font-family:'JetBrains Mono';font-size:10px;margin-top:6px;line-height:1.7}
+.bbd{font-family:'JetBrains Mono';font-size:10px;margin-top:6px;line-height:1.7;color:var(--m3)}
 
-/* CREDS */
+/* ── RATE CARD MODAL ── */
+.rm{max-width:500px;max-height:90vh}
+.rate-day{margin-bottom:22px}
+.rate-day-title{
+  font-family:'Bebas Neue';font-size:17px;letter-spacing:3px;
+  margin-bottom:11px;display:flex;align-items:center;gap:8px;
+  padding-bottom:8px;border-bottom:1px solid var(--bo);
+}
+.rate-tbl{width:100%;border-collapse:collapse;font-size:12px}
+.rate-tbl th{
+  text-align:left;font-family:'JetBrains Mono';font-size:8px;
+  letter-spacing:2px;color:var(--m3);padding:0 12px 8px;
+  border-bottom:1px solid var(--bo);
+}
+.rate-tbl td{padding:9px 12px;border-bottom:1px solid var(--bo);vertical-align:middle}
+.rate-tbl tr:last-child td{border-bottom:none}
+.rate-tbl tr:hover td{background:var(--s2)}
+.rate-slot{font-family:'JetBrains Mono';font-size:11px;color:var(--m3)}
+.rate-pts{font-family:'Bebas Neue';font-size:22px;color:var(--a);letter-spacing:1px}
+.rate-rs{font-family:'JetBrains Mono';font-size:11px;color:var(--a2)}
+.rate-note{
+  font-family:'JetBrains Mono';font-size:10px;color:var(--m3);
+  margin-top:14px;padding:12px 14px;
+  background:var(--s2);border:1px solid var(--bo);border-radius:9px;line-height:1.8;
+}
+.rate-note strong{color:var(--tx)}
+
+/* screen-reader only */
+.sr-only{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+/* table wrapper in member modal */
+.mtbl-wrap{background:var(--s2);border:1px solid var(--bo);border-radius:11px;overflow:hidden;margin-bottom:16px}
+/* modal title color variants */
+.mti-blue{color:var(--a2)}
+.mti-gold{color:var(--go)}
+.mti-green{color:var(--a)}
+/* rate day title colors */
+.rday-green{color:var(--a)}
+.rday-blue{color:var(--a2)}
+.rday-gold{color:var(--go)}
+/* credentials modal */
 .ccm{max-width:400px}
 
-/* TOAST */
-.toast{position:fixed;bottom:max(80px, calc(env(safe-area-inset-bottom) + 80px));right:20px;background:var(--su);border:1px solid var(--a);border-radius:11px;padding:10px 17px;font-family:'JetBrains Mono';font-size:11px;color:var(--a);transform:translateY(60px);opacity:0;transition:all .3s;z-index:900}
+/* ── TOAST ── */
+.toast{
+  position:fixed;
+  bottom:max(80px,calc(env(safe-area-inset-bottom) + 80px));right:20px;
+  background:var(--su);border:1px solid var(--a);border-radius:11px;
+  padding:10px 17px;font-family:'JetBrains Mono';font-size:11px;color:var(--a);
+  transform:translateY(60px);opacity:0;transition:all .3s;z-index:900;
+}
 .toast.show{transform:translateY(0);opacity:1}
 
-/* MOBILE NAV */
-/* FIX 2: -webkit-backdrop-filter added + safe area bottom */
-.mnav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--gl);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-top:1px solid var(--bo);padding:7px 0;padding-bottom:max(7px, env(safe-area-inset-bottom));z-index:200}
+/* ── MOBILE NAV ── */
+.mnav{
+  display:none;position:fixed;bottom:0;left:0;right:0;
+  background:var(--gl);
+  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
+  border-top:1px solid var(--bo);
+  padding:7px 0;padding-bottom:max(7px,env(safe-area-inset-bottom));
+  z-index:200;
+}
 .mni{display:flex;justify-content:space-around}
-.mnb{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;color:var(--m3);cursor:pointer;padding:5px 10px;border-radius:10px;transition:all .2s;min-width:50px;min-height:44px;touch-action:manipulation;}
-.mnb.active{color:var(--a)}.mni2{font-size:19px;line-height:1}
+.mnb{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  background:none;border:none;color:var(--m3);cursor:pointer;
+  padding:5px 10px;border-radius:10px;transition:all .2s;
+  min-width:50px;min-height:44px;touch-action:manipulation;
+}
+.mnb.active{color:var(--a)}
+.mni2{font-size:19px;line-height:1}
 .mnl{font-family:'JetBrains Mono';font-size:7px;letter-spacing:1px}
 
-/* ─── RESPONSIVE ─── */
+/* ── VIEW MODE: hide manage-only items ── */
+.vm .wo{display:none}
+.vm [data-tab="log"]{display:none}
+
+/* ── RESPONSIVE ── */
 @media(max-width:768px){
   .tabs{display:none}.mnav{display:block}
   .mw{padding:14px 12px 88px}
-  header{padding:10px 13px;padding-top:max(10px, env(safe-area-inset-top))}.hl{font-size:18px}
+  header{padding:10px 13px;padding-top:max(10px,env(safe-area-inset-top))}
+  .hl{font-size:18px}
   .fr.c3{grid-template-columns:1fr 1fr}
   .statrow{grid-template-columns:1fr 1fr;gap:10px}
   .mg{grid-template-columns:1fr 1fr}
-  .toast{bottom:max(70px, calc(env(safe-area-inset-bottom) + 70px))}
-  .card{padding:16px 14px}.srow{padding:12px 13px}
-  /* FIX: larger tap targets on mobile */
+  .toast{bottom:max(70px,calc(env(safe-area-inset-bottom) + 70px))}
+  .card{padding:16px 14px}
+  .srow{padding:12px 13px}
   .chip{padding:8px 14px}
+  .hr2{gap:5px}
 }
-@media(max-width:400px){.fr.c3{grid-template-columns:1fr}.mg{grid-template-columns:1fr}.sgrid{grid-template-columns:1fr}.sbt{grid-template-columns:1fr}}
-
-/* FIX: Active state for touch (replaces hover on mobile) */
+@media(max-width:400px){
+  .fr.c3{grid-template-columns:1fr}
+  .mg{grid-template-columns:1fr}
+  .sgrid{grid-template-columns:1fr}
+  .sbt{grid-template-columns:1fr}
+}
 @media(hover:none){
   .sbtn:active{transform:translateY(-2px);opacity:.88}
   .srow:active{background:var(--s3);border-color:var(--rc,var(--a2))}
@@ -320,14 +634,11 @@ input[type=date]{font-size:14px;}
   .mc:active{transform:translateY(-2px)}
   .bcalc:active{transform:translateY(-2px)}
 }
-
-.vm .wo{display:none!important}
-.vm [data-tab="log"]{display:none!important}
 </style>
 </head>
 <body>
 
-<!-- SPLASH -->
+<!-- ═══════════════ SPLASH ═══════════════ -->
 <div id="splash">
   <div class="sdeco"></div>
   <div class="scourt"><span class="bir">🏸</span></div>
@@ -339,27 +650,40 @@ input[type=date]{font-size:14px;}
   </div>
 </div>
 
-<!-- LOGIN -->
+<!-- ═══════════════ LOGIN ═══════════════ -->
 <div id="loginModal">
   <div class="lb">
     <div class="lti">🔐 Manage Access</div>
     <div class="lsu">Enter credentials to manage sessions</div>
-    <!-- FIX 7: Added aria-label to all form inputs (axe/forms labels) -->
-    <div class="lf"><label for="loginId">USERNAME</label><input type="text" id="loginId" aria-label="Username" autocomplete="username"></div>
-    <div class="lf"><label for="loginPw">PASSWORD</label><input type="password" id="loginPw" aria-label="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <div class="lf">
+      <label for="loginId">USERNAME</label>
+      <input type="text" id="loginId" aria-label="Username" autocomplete="username">
+    </div>
+    <div class="lf">
+      <label for="loginPw">PASSWORD</label>
+      <input type="password" id="loginPw" aria-label="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
     <div class="le" id="loginErr" role="alert" aria-live="polite"></div>
-    <div class="lb2"><button class="bcn" onclick="closeLogin()">Cancel</button><button class="ben" onclick="doLogin()">ENTER</button></div>
+    <div class="lb2">
+      <button class="bcn" onclick="closeLogin()">Cancel</button>
+      <button class="ben" onclick="doLogin()">ENTER</button>
+    </div>
   </div>
 </div>
 
-<!-- APP -->
+<!-- ═══════════════ APP ═══════════════ -->
 <div id="app">
   <header>
-    <div><div class="hl">COURT POINTS</div><div class="hls">BADMINTON TRACKER</div></div>
+    <div>
+      <div class="hl">COURT POINTS</div>
+      <div class="hls">BADMINTON TRACKER</div>
+    </div>
     <div class="hr2">
+      <button class="ibt" onclick="openRates()" aria-label="View rate card" title="Rate card">🏷️</button>
       <button class="ibt" onclick="toggleTheme()" id="themeBtn" aria-label="Toggle theme">☀️</button>
       <div class="ppill" id="poolPill">POOL LEFT<strong id="hdrPts">12,500 pts</strong></div>
       <button class="cbt wo" onclick="openCC()">⚙ CREDS</button>
+      <button class="lout wo" onclick="goBack()">← EXIT</button>
     </div>
   </header>
 
@@ -372,6 +696,7 @@ input[type=date]{font-size:14px;}
   </div>
 
   <div class="mw">
+
     <!-- OVERVIEW -->
     <div class="tp active" id="tab-overview" role="tabpanel">
       <div class="pool-banner hide" id="poolBanner">
@@ -385,35 +710,53 @@ input[type=date]{font-size:14px;}
         <div><div class="sv" id="stUsed">0</div><div class="svl">PTS USED</div></div>
         <div><div class="sv" id="stLeft">12,500</div><div class="svl">PTS LEFT</div></div>
         <div><div class="sv" id="stSess">0</div><div class="svl">SESSIONS</div></div>
-        <div><div class="bbg"><div class="bbf" id="bigBar"></div></div><div class="bbl" id="bigBarLbl">0% used</div></div>
+        <div>
+          <div class="bbg"><div class="bbf" id="bigBar"></div></div>
+          <div class="bbl" id="bigBarLbl">0% used</div>
+        </div>
       </div>
     </div>
 
-    <!-- LOG -->
+    <!-- LOG SESSION -->
     <div class="tp" id="tab-log" role="tabpanel">
       <div class="card">
         <h2 class="cg">+ Log a Session</h2>
         <div class="fr c3">
-          <div class="fg"><label for="fDate">DATE</label><input type="date" id="fDate" aria-label="Session date" onchange="onDC()"></div>
-          <div class="fg"><label for="fStart">START TIME</label><select id="fStart" aria-label="Start time" onchange="onSC()"></select></div>
-          <div class="fg"><label for="fEnd">END TIME</label><select id="fEnd" aria-label="End time" onchange="renderCB()"></select></div>
+          <div class="fg">
+            <label for="fDate">DATE</label>
+            <input type="date" id="fDate" aria-label="Session date" onchange="onDC()">
+          </div>
+          <div class="fg">
+            <label for="fStart">START TIME</label>
+            <select id="fStart" aria-label="Start time" onchange="onSC()"></select>
+          </div>
+          <div class="fg">
+            <label for="fEnd">END TIME</label>
+            <select id="fEnd" aria-label="End time" onchange="renderCB()"></select>
+          </div>
         </div>
         <div class="cbox" id="costBox" aria-live="polite">Pick date and time to see court cost</div>
-        <!-- FIX 3: Replaced style="margin-top:0" with class -->
         <div class="sl sl-notop">WHO PLAYED?</div>
         <div class="chips" id="memberChips"></div>
         <div class="sl sl-notop">GUESTS</div>
         <div class="kc" id="kchips"></div>
-        <!-- FIX 3: Replaced inline style on wrapper div with class -->
-        <div class="gar"><input type="text" id="guestInput" aria-label="Guest name" placeholder="Guest name… (Enter to add)" onkeydown="if(event.key==='Enter')addGuest()"><button class="bgh" onclick="addGuest()">+ Add</button></div>
+        <div class="gar">
+          <input type="text" id="guestInput" aria-label="Guest name" placeholder="Guest name… (Enter to add)" onkeydown="if(event.key==='Enter')addGuest()">
+          <button class="bgh" onclick="addGuest()">+ Add</button>
+        </div>
         <div class="gcards" id="sessionGcards"></div>
-        <div class="lbw"><button class="bpr" id="logBtn" onclick="logSession()" disabled aria-disabled="true">LOG SESSION</button></div>
+        <div class="lbw">
+          <button class="bpr" id="logBtn" onclick="logSession()" disabled aria-disabled="true">LOG SESSION</button>
+        </div>
       </div>
     </div>
 
     <!-- HISTORY -->
     <div class="tp" id="tab-history" role="tabpanel">
-      <div class="card"><h2 class="cb">Session History</h2><div id="histWrap"></div></div>
+      <div class="card">
+        <h2 class="cb">Session History</h2>
+        <div id="histWrap"></div>
+      </div>
     </div>
 
     <!-- GUESTS -->
@@ -440,21 +783,86 @@ input[type=date]{font-size:14px;}
         </div>
       </div>
     </div>
-  </div>
+
+  </div><!-- /mw -->
 
   <!-- MOBILE NAV -->
   <nav class="mnav" aria-label="Main navigation">
     <div class="mni">
-      <button class="mnb active" data-tab="overview" onclick="showTab('overview')" aria-label="Home"><span class="mni2">🏠</span><span class="mnl">HOME</span></button>
-      <button class="mnb wo" data-tab="log" onclick="showTab('log')" aria-label="Log session"><span class="mni2">➕</span><span class="mnl">LOG</span></button>
-      <button class="mnb" data-tab="history" onclick="showTab('history')" aria-label="History"><span class="mni2">📋</span><span class="mnl">HISTORY</span></button>
-      <button class="mnb" data-tab="guests" onclick="showTab('guests')" aria-label="Guests"><span class="mni2">👥</span><span class="mnl">GUESTS</span></button>
-      <button class="mnb" data-tab="settle" onclick="showTab('settle')" aria-label="Settlement"><span class="mni2">⚡</span><span class="mnl">SETTLE</span></button>
+      <button class="mnb active" data-tab="overview" onclick="showTab('overview')" aria-label="Home">
+        <span class="mni2">🏠</span><span class="mnl">HOME</span>
+      </button>
+      <button class="mnb wo" data-tab="log" onclick="showTab('log')" aria-label="Log session">
+        <span class="mni2">➕</span><span class="mnl">LOG</span>
+      </button>
+      <button class="mnb" data-tab="history" onclick="showTab('history')" aria-label="History">
+        <span class="mni2">📋</span><span class="mnl">HISTORY</span>
+      </button>
+      <button class="mnb" data-tab="guests" onclick="showTab('guests')" aria-label="Guests">
+        <span class="mni2">👥</span><span class="mnl">GUESTS</span>
+      </button>
+      <button class="mnb" data-tab="settle" onclick="showTab('settle')" aria-label="Settlement">
+        <span class="mni2">⚡</span><span class="mnl">SETTLE</span>
+      </button>
     </div>
   </nav>
+</div><!-- /app -->
+
+<!-- ═══════════════ RATE CARD MODAL ═══════════════ -->
+<div class="mbg" id="rateModal" role="dialog" aria-modal="true" aria-labelledby="rateTitle" onclick="if(event.target===this)closeRates()">
+  <div class="modal rm">
+    <button class="mclose" onclick="closeRates()" aria-label="Close">✕</button>
+    <div class="mti sm mti-blue" id="rateTitle">🏷️ Court Rate Card</div>
+    <div class="msu">Points per hour · 1 pt = ₹0.80</div>
+
+    <div class="rate-day">
+      <div class="rate-day-title rday-green">🗓 Saturday</div>
+      <table class="rate-tbl">
+        <thead><tr><th>TIME SLOT</th><th>RATE</th><th>IN ₹/HR</th></tr></thead>
+        <tbody>
+          <tr><td class="rate-slot">6am – 11am</td><td><span class="rate-pts">500</span> pts/hr</td><td class="rate-rs">₹400/hr</td></tr>
+          <tr><td class="rate-slot">11am – 4pm</td><td><span class="rate-pts">450</span> pts/hr</td><td class="rate-rs">₹360/hr</td></tr>
+          <tr><td class="rate-slot">7pm – 11pm</td><td><span class="rate-pts">500</span> pts/hr</td><td class="rate-rs">₹400/hr</td></tr>
+          <tr><td class="rate-slot">11pm – 12am</td><td><span class="rate-pts">450</span> pts/hr</td><td class="rate-rs">₹360/hr</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="rate-day">
+      <div class="rate-day-title rday-blue">🗓 Sunday</div>
+      <table class="rate-tbl">
+        <thead><tr><th>TIME SLOT</th><th>RATE</th><th>IN ₹/HR</th></tr></thead>
+        <tbody>
+          <tr><td class="rate-slot">6am – 11am</td><td><span class="rate-pts">500</span> pts/hr</td><td class="rate-rs">₹400/hr</td></tr>
+          <tr><td class="rate-slot">11am – 3pm</td><td><span class="rate-pts">450</span> pts/hr</td><td class="rate-rs">₹360/hr</td></tr>
+          <tr><td class="rate-slot">3pm – 5pm</td><td><span class="rate-pts">480</span> pts/hr</td><td class="rate-rs">₹384/hr</td></tr>
+          <tr><td class="rate-slot">5pm – 11pm</td><td><span class="rate-pts">500</span> pts/hr</td><td class="rate-rs">₹400/hr</td></tr>
+          <tr><td class="rate-slot">11pm – 12am</td><td><span class="rate-pts">450</span> pts/hr</td><td class="rate-rs">₹360/hr</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="rate-day">
+      <div class="rate-day-title rday-gold">🗓 Weekdays (Mon–Fri)</div>
+      <table class="rate-tbl">
+        <thead><tr><th>TIME SLOT</th><th>RATE</th><th>IN ₹/HR</th></tr></thead>
+        <tbody>
+          <tr><td class="rate-slot">7am – 11am</td><td><span class="rate-pts">450</span> pts/hr</td><td class="rate-rs">₹360/hr</td></tr>
+          <tr><td class="rate-slot">11am – 1pm</td><td><span class="rate-pts">300</span> pts/hr</td><td class="rate-rs">₹240/hr</td></tr>
+          <tr><td class="rate-slot">1pm – 4pm</td><td><span class="rate-pts">350</span> pts/hr</td><td class="rate-rs">₹280/hr</td></tr>
+          <tr><td class="rate-slot">7pm – 11pm</td><td><span class="rate-pts">480</span> pts/hr</td><td class="rate-rs">₹384/hr</td></tr>
+          <tr><td class="rate-slot">11pm – 12am</td><td><span class="rate-pts">450</span> pts/hr</td><td class="rate-rs">₹360/hr</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="rate-note">
+      <strong>Pool:</strong> 12,500 pts total · 5 members × ₹2,000 each · Min booking: 300 pts (1hr weekday off-peak)
+    </div>
+  </div>
 </div>
 
-<!-- MODALS -->
+<!-- PAY-TO MODAL -->
 <div class="mbg" id="payToModal" role="dialog" aria-modal="true" aria-labelledby="payToTitle" onclick="if(event.target===this)closePT()">
   <div class="modal ptm">
     <button class="mclose" onclick="closePT()" aria-label="Close">✕</button>
@@ -464,10 +872,15 @@ input[type=date]{font-size:14px;}
   </div>
 </div>
 
+<!-- MEMBER DETAIL MODAL -->
 <div class="mbg" id="memberModal" role="dialog" aria-modal="true" aria-label="Member detail" onclick="if(event.target===this)closeMM()">
-  <div class="modal mdm"><button class="mclose" onclick="closeMM()" aria-label="Close">✕</button><div id="mmBody"></div></div>
+  <div class="modal mdm">
+    <button class="mclose" onclick="closeMM()" aria-label="Close">✕</button>
+    <div id="mmBody"></div>
+  </div>
 </div>
 
+<!-- FINAL CALCULATE MODAL -->
 <div class="mbg" id="finalModal" role="dialog" aria-modal="true" aria-labelledby="finalTitle" onclick="if(event.target===this)closeFinal()">
   <div class="modal fcm">
     <button class="mclose" onclick="closeFinal()" aria-label="Close">✕</button>
@@ -477,25 +890,38 @@ input[type=date]{font-size:14px;}
   </div>
 </div>
 
+<!-- CREDENTIALS MODAL -->
 <div class="mbg" id="credsModal" role="dialog" aria-modal="true" aria-labelledby="credsTitle" onclick="if(event.target===this)closeCC()">
   <div class="modal ccm">
     <button class="mclose" onclick="closeCC()" aria-label="Close">✕</button>
-    <div class="mti sm" id="credsTitle" style="color:var(--go)">Change Credentials</div>
+    <div class="mti sm mti-gold" id="credsTitle">Change Credentials</div>
     <div class="msu">Update manage username &amp; password</div>
-    <div class="lf"><label for="newId">NEW USERNAME</label><input type="text" id="newId" aria-label="New username" autocomplete="username"></div>
-    <div class="lf"><label for="newPw">NEW PASSWORD</label><input type="password" id="newPw" aria-label="New password" autocomplete="new-password"></div>
-    <div class="lf"><label for="newPwC">CONFIRM PASSWORD</label><input type="password" id="newPwC" aria-label="Confirm new password" autocomplete="new-password"></div>
+    <div class="lf">
+      <label for="newId">NEW USERNAME</label>
+      <input type="text" id="newId" aria-label="New username" autocomplete="username">
+    </div>
+    <div class="lf">
+      <label for="newPw">NEW PASSWORD</label>
+      <input type="password" id="newPw" aria-label="New password" autocomplete="new-password">
+    </div>
+    <div class="lf">
+      <label for="newPwC">CONFIRM PASSWORD</label>
+      <input type="password" id="newPwC" aria-label="Confirm new password" autocomplete="new-password">
+    </div>
     <div class="le" id="credsErr" role="alert" aria-live="polite"></div>
-    <div class="lb2"><button class="bcn" onclick="closeCC()">Cancel</button><button class="ben" onclick="saveCreds()">SAVE</button></div>
+    <div class="lb2">
+      <button class="bcn" onclick="closeCC()">Cancel</button>
+      <button class="ben" onclick="saveCreds()">SAVE</button>
+    </div>
   </div>
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
-/* ══════════════════════════════════════════════════════
+/* ══════════════════════════════════════════
    CONSTANTS
-══════════════════════════════════════════════════════ */
+══════════════════════════════════════════ */
 const MEMBERS = [
   {name:'Priyam',  color:'#b8ff3c'},
   {name:'Bharat',  color:'#3cc4ff'},
@@ -503,172 +929,355 @@ const MEMBERS = [
   {name:'Dewaang', color:'#ffcc44'},
   {name:'Khushi',  color:'#ff9f3c'},
 ];
-const N=5, TOTAL_PTS=12500, TOTAL_PAY=10000, PER_HEAD_PTS=2500, PTS_RS=0.8;
-const MIN_BOOKING = 300;
+const N = 5, TOTAL_PTS = 12500, PER_HEAD_PTS = 2500, PTS_RS = 0.8, MIN_BOOKING = 300;
 
-/* ══════════════════════════════════════════════════════
+/* ══════════════════════════════════════════
    SCHEDULE
-══════════════════════════════════════════════════════ */
+══════════════════════════════════════════ */
 const SCHED = {
   sat: [{f:6,t:11,r:500},{f:11,t:16,r:450},{f:19,t:23,r:500},{f:23,t:24,r:450}],
   sun: [{f:6,t:11,r:500},{f:11,t:15,r:450},{f:15,t:17,r:480},{f:17,t:23,r:500},{f:23,t:24,r:450}],
   wkd: [{f:7,t:11,r:450},{f:11,t:13,r:300},{f:13,t:16,r:350},{f:19,t:23,r:480},{f:23,t:24,r:450}]
 };
-function getSc(d){if(!d)return SCHED.wkd;const day=new Date(d+'T00:00:00').getDay();return day===6?SCHED.sat:day===0?SCHED.sun:SCHED.wkd;}
-function avS(sc){const s=new Set();for(const b of sc)for(let h=b.f;h<b.t;h++)s.add(h);return[...s].sort((a,b)=>a-b);}
-function avE(sc,sh){const e=[];for(let h=sh+1;h<=24;h++){if(cC(sc,sh,h))e.push(h);else break;}return e;}
-function cC(sc,sh,eh){if(isNaN(sh)||isNaN(eh)||eh<=sh)return null;let tot=0,cov=0,det=[];for(const b of sc){const lo=Math.max(b.f,sh),hi=Math.min(b.t,eh);if(hi>lo){tot+=(hi-lo)*b.r;cov+=hi-lo;det.push({f:lo,t:hi,r:b.r,pts:(hi-lo)*b.r});}}if(cov<eh-sh)return null;return{total:tot,det};}
-function fH(h){if(h===0||h===24)return'12am';if(h===12)return'12pm';return h<12?h+'am':(h-12)+'pm';}
-function fD(d){return new Date(d+'T00:00:00').toLocaleDateString('en-IN',{day:'2-digit',month:'short'});}
-function R(n){return Math.round(n);}
+function getSc(d){
+  if(!d) return SCHED.wkd;
+  const day = new Date(d+'T00:00:00').getDay();
+  return day===6 ? SCHED.sat : day===0 ? SCHED.sun : SCHED.wkd;
+}
+function avS(sc){
+  const s = new Set();
+  for(const b of sc) for(let h=b.f; h<b.t; h++) s.add(h);
+  return [...s].sort((a,b)=>a-b);
+}
+function avE(sc, sh){
+  const e = [];
+  for(let h=sh+1; h<=24; h++){
+    if(cC(sc,sh,h)) e.push(h); else break;
+  }
+  return e;
+}
+function cC(sc, sh, eh){
+  if(isNaN(sh)||isNaN(eh)||eh<=sh) return null;
+  let tot=0, cov=0, det=[];
+  for(const b of sc){
+    const lo=Math.max(b.f,sh), hi=Math.min(b.t,eh);
+    if(hi>lo){ tot+=(hi-lo)*b.r; cov+=hi-lo; det.push({f:lo,t:hi,r:b.r,pts:(hi-lo)*b.r}); }
+  }
+  if(cov<eh-sh) return null;
+  return {total:tot, det};
+}
+function fH(h){
+  if(h===0||h===24) return '12am';
+  if(h===12) return '12pm';
+  return h<12 ? h+'am' : (h-12)+'pm';
+}
+function fD(d){ return new Date(d+'T00:00:00').toLocaleDateString('en-IN',{day:'2-digit',month:'short'}); }
+function R(n){ return Math.round(n); }
 
-/* ══════════════════════════════════════════════════════
-   DB
-══════════════════════════════════════════════════════ */
-function loadDB(){try{return JSON.parse(localStorage.getItem('cp_db')||'null')||{sessions:[],knownGuests:[],payments:{}};}catch(e){return{sessions:[],knownGuests:[],payments:{}};}}
-function saveDB(){localStorage.setItem('cp_db',JSON.stringify(DB));}
+/* ══════════════════════════════════════════
+   DATABASE
+══════════════════════════════════════════ */
+function loadDB(){
+  try{ return JSON.parse(localStorage.getItem('cp_db')||'null') || {sessions:[],knownGuests:[],payments:{}}; }
+  catch(e){ return {sessions:[],knownGuests:[],payments:{}}; }
+}
+function saveDB(){ localStorage.setItem('cp_db', JSON.stringify(DB)); }
 let DB = loadDB();
 
-/* ══════════════════════════════════════════════════════
+/* ══════════════════════════════════════════
    AUTH
-══════════════════════════════════════════════════════ */
+══════════════════════════════════════════ */
 let CREDS = {id:'dewaang', pw:'1234'};
-try{const c=JSON.parse(localStorage.getItem('cp_creds'));if(c&&c.id&&c.pw)CREDS=c;}catch(e){}
+try{ const c=JSON.parse(localStorage.getItem('cp_creds')); if(c&&c.id&&c.pw) CREDS=c; }catch(e){}
 let isManage = false;
 
-function openLogin(){document.getElementById('loginModal').classList.add('open');document.getElementById('loginId').value='';document.getElementById('loginPw').value='';document.getElementById('loginErr').textContent='';setTimeout(()=>document.getElementById('loginId').focus(),120);}
-function closeLogin(){document.getElementById('loginModal').classList.remove('open');}
-function doLogin(){const id=document.getElementById('loginId').value.trim();const pw=document.getElementById('loginPw').value;if(id===CREDS.id&&pw===CREDS.pw){closeLogin();enterManage();}else document.getElementById('loginErr').textContent='Incorrect credentials.';}
-function enterView(){isManage=false;document.getElementById('splash').style.display='none';const a=document.getElementById('app');a.classList.add('open','vm');init();}
-function enterManage(){isManage=true;document.getElementById('splash').style.display='none';const a=document.getElementById('app');a.classList.add('open');a.classList.remove('vm');init();}
-function openCC(){document.getElementById('credsModal').classList.add('open');}
-function closeCC(){document.getElementById('credsModal').classList.remove('open');}
-function saveCreds(){const id=document.getElementById('newId').value.trim();const pw=document.getElementById('newPw').value;const pwc=document.getElementById('newPwC').value;const err=document.getElementById('credsErr');if(!id){err.textContent='Username required.';return;}if(!pw){err.textContent='Password required.';return;}if(pw!==pwc){err.textContent='Passwords do not match.';return;}CREDS={id,pw};localStorage.setItem('cp_creds',JSON.stringify(CREDS));closeCC();showToast('Credentials updated');}
+function openLogin(){
+  document.getElementById('loginModal').classList.add('open');
+  document.getElementById('loginId').value='';
+  document.getElementById('loginPw').value='';
+  document.getElementById('loginErr').textContent='';
+  setTimeout(()=>document.getElementById('loginId').focus(),120);
+}
+function closeLogin(){ document.getElementById('loginModal').classList.remove('open'); }
+function doLogin(){
+  const id = document.getElementById('loginId').value.trim();
+  const pw = document.getElementById('loginPw').value;
+  if(id===CREDS.id && pw===CREDS.pw){ closeLogin(); enterManage(); }
+  else document.getElementById('loginErr').textContent='Incorrect credentials.';
+}
+function enterView(){
+  isManage=false;
+  document.getElementById('splash').style.display='none';
+  const a=document.getElementById('app');
+  a.classList.add('open','vm');
+  init();
+}
+function enterManage(){
+  isManage=true;
+  document.getElementById('splash').style.display='none';
+  const a=document.getElementById('app');
+  a.classList.add('open');
+  a.classList.remove('vm');
+  init();
+}
+function goBack(){
+  const a=document.getElementById('app');
+  a.classList.remove('open','vm');
+  isManage=false;
+  document.getElementById('splash').style.display='';
+  // reset to overview tab for next entry
+  showTabInternal('overview');
+}
+function openCC(){ document.getElementById('credsModal').classList.add('open'); }
+function closeCC(){ document.getElementById('credsModal').classList.remove('open'); }
+function saveCreds(){
+  const id=document.getElementById('newId').value.trim();
+  const pw=document.getElementById('newPw').value;
+  const pwc=document.getElementById('newPwC').value;
+  const err=document.getElementById('credsErr');
+  if(!id){err.textContent='Username required.';return;}
+  if(!pw){err.textContent='Password required.';return;}
+  if(pw!==pwc){err.textContent='Passwords do not match.';return;}
+  CREDS={id,pw};
+  localStorage.setItem('cp_creds',JSON.stringify(CREDS));
+  closeCC();
+  showToast('Credentials updated');
+}
 
-/* ══════════════════════════════════════════════════════
+/* ══════════════════════════════════════════
+   RATE MODAL
+══════════════════════════════════════════ */
+function openRates(){ document.getElementById('rateModal').classList.add('open'); }
+function closeRates(){ document.getElementById('rateModal').classList.remove('open'); }
+
+/* ══════════════════════════════════════════
    THEME
-══════════════════════════════════════════════════════ */
-function applyTheme(t){document.documentElement.setAttribute('data-theme',t);document.getElementById('themeBtn').textContent=t==='dark'?'☀️':'🌙';}
-function toggleTheme(){const n=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';applyTheme(n);localStorage.setItem('cp_theme',n);}
+══════════════════════════════════════════ */
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme',t);
+  document.getElementById('themeBtn').textContent = t==='dark'?'☀️':'🌙';
+}
+function toggleTheme(){
+  const n = document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';
+  applyTheme(n);
+  localStorage.setItem('cp_theme',n);
+}
 applyTheme(localStorage.getItem('cp_theme')||'dark');
 
-/* ══════════════════════════════════════════════════════
+/* ══════════════════════════════════════════
    TABS
-══════════════════════════════════════════════════════ */
-function showTab(t){
-  if(t==='log'&&!isManage)return;
+══════════════════════════════════════════ */
+function showTabInternal(t){
   document.querySelectorAll('.tp').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('[data-tab]').forEach(b=>{
     b.classList.remove('active');
-    if(b.hasAttribute('aria-selected'))b.setAttribute('aria-selected','false');
+    if(b.hasAttribute('aria-selected')) b.setAttribute('aria-selected','false');
   });
-  document.getElementById('tab-'+t).classList.add('active');
+  const panel = document.getElementById('tab-'+t);
+  if(panel) panel.classList.add('active');
   document.querySelectorAll('[data-tab="'+t+'"]').forEach(b=>{
     b.classList.add('active');
-    if(b.hasAttribute('aria-selected'))b.setAttribute('aria-selected','true');
+    if(b.hasAttribute('aria-selected')) b.setAttribute('aria-selected','true');
   });
+}
+function showTab(t){
+  if(t==='log' && !isManage) return;
+  showTabInternal(t);
   ({overview:renderOV,history:renderHist,guests:renderGL,settle:renderSettle}[t]||(() => {}))();
 }
 
-/* ══════════════════════════════════════════════════════
+/* ══════════════════════════════════════════
+   POOL HELPER
+══════════════════════════════════════════ */
+function usedPts(){ return DB.sessions.reduce((a,s)=>a+s.cost,0); }
+function remainingPts(){ return TOTAL_PTS - usedPts(); }
+
+/* ══════════════════════════════════════════
    LOG FORM
-══════════════════════════════════════════════════════ */
+══════════════════════════════════════════ */
 let selMem = new Set(MEMBERS.map(m=>m.name));
 let sessGuests = [];
 
-function onDC(){const sc=getSc(document.getElementById('fDate').value);document.getElementById('fStart').innerHTML=avS(sc).map(h=>`<option value="${h}">${fH(h)}</option>`).join('');onSC();}
-function onSC(){const sc=getSc(document.getElementById('fDate').value);const sh=parseInt(document.getElementById('fStart').value);document.getElementById('fEnd').innerHTML=avE(sc,sh).map(h=>`<option value="${h}">${fH(h)} — ${h-sh}hr</option>`).join('');renderCB();}
+function onDC(){
+  const sc = getSc(document.getElementById('fDate').value);
+  document.getElementById('fStart').innerHTML = avS(sc).map(h=>`<option value="${h}">${fH(h)}</option>`).join('');
+  onSC();
+}
+function onSC(){
+  const sc = getSc(document.getElementById('fDate').value);
+  const sh = parseInt(document.getElementById('fStart').value);
+  document.getElementById('fEnd').innerHTML = avE(sc,sh).map(h=>`<option value="${h}">${fH(h)} — ${h-sh}hr</option>`).join('');
+  renderCB();
+}
+
 function renderCB(){
-  const d=document.getElementById('fDate').value;
-  const sh=parseInt(document.getElementById('fStart').value);
-  const eh=parseInt(document.getElementById('fEnd').value);
-  const box=document.getElementById('costBox');
-  const btn=document.getElementById('logBtn');
-  if(!d||isNaN(sh)||isNaN(eh)){box.innerHTML='Pick date and time to see court cost';btn.disabled=true;btn.setAttribute('aria-disabled','true');return;}
-  const res=cC(getSc(d),sh,eh);
-  if(!res){box.innerHTML='<span class="warn">⚠ Crosses a closed slot.</span>';btn.disabled=true;btn.setAttribute('aria-disabled','true');return;}
-  const ppl=selMem.size+sessGuests.length;
-  const used=DB.sessions.reduce((a,s)=>a+s.cost,0);
-  const remaining=TOTAL_PTS-used;
-  const overBudget=res.total>remaining;
-  const ppRs=ppl>0?R((res.total/ppl)*PTS_RS):null;
-  const bkd=res.det.map(d=>`${fH(d.f)}–${fH(d.t)}: ${d.pts}pts`).join(' · ');
-  box.innerHTML=`<div class="crow"><span class="big">${res.total} pts</span><span style="color:var(--m3)">${fH(sh)}–${fH(eh)} · ${eh-sh}hr</span>${ppl?`<span class="pp2">÷${ppl} players = ₹${ppRs}/head</span>`:'<span class="warn">Select at least 1 player</span>'}${overBudget?`<span class="warn">⚠ Exceeds remaining ${remaining} pts</span>`:''}</div><div class="cslot">${bkd}</div>`;
-  btn.disabled=ppl===0;
+  const d   = document.getElementById('fDate').value;
+  const sh  = parseInt(document.getElementById('fStart').value);
+  const eh  = parseInt(document.getElementById('fEnd').value);
+  const box = document.getElementById('costBox');
+  const btn = document.getElementById('logBtn');
+
+  function disable(cls, html){ box.className='cbox '+cls; box.innerHTML=html; btn.disabled=true; btn.setAttribute('aria-disabled','true'); }
+
+  if(!d || isNaN(sh) || isNaN(eh)){
+    disable('','Pick date and time to see court cost'); return;
+  }
+  const res = cC(getSc(d), sh, eh);
+  if(!res){
+    disable('','<span class="warn">⚠ Crosses a closed slot.</span>'); return;
+  }
+
+  const rem = remainingPts();
+
+  /* ─── HARD BLOCK: pool fully exhausted ─── */
+  if(rem <= 0){
+    disable('exhausted',
+      '<div class="crow"><span class="big">🚫 POOL EXHAUSTED</span></div>' +
+      '<div class="cslot" style="color:var(--a3)">All '+TOTAL_PTS.toLocaleString()+' pts have been used. Settle up before logging more sessions.</div>'
+    );
+    return;
+  }
+
+  const ppl   = selMem.size + sessGuests.length;
+  const ppRs  = ppl>0 ? R((res.total/ppl)*PTS_RS) : null;
+  const bkd   = res.det.map(d=>`${fH(d.f)}–${fH(d.t)}: ${d.pts}pts`).join(' · ');
+  const crowd = `<div class="crow">
+    <span class="big">${res.total} pts</span>
+    <span style="color:var(--m3)">${fH(sh)}–${fH(eh)} · ${eh-sh}hr</span>
+    ${ppl ? `<span class="pp2">÷${ppl} players = ₹${ppRs}/head</span>` : '<span class="warn">Select at least 1 player</span>'}
+  </div><div class="cslot">${bkd}</div>`;
+
+  /* ─── HARD BLOCK: session would exceed pool ─── */
+  if(res.total > rem){
+    disable('exhausted',
+      crowd +
+      '<div class="pool-warn-inline">🚫 Not enough pts — need <strong>'+res.total+'</strong> but only <strong>'+rem+'</strong> left. Choose a shorter slot or settle up.</div>'
+    );
+    return;
+  }
+
+  /* ─── OK ─── */
+  box.className = 'cbox';
+  box.innerHTML = crowd;
+  btn.disabled = (ppl === 0);
   btn.setAttribute('aria-disabled', ppl===0 ? 'true' : 'false');
 }
+
 function renderMC(){
-  const w=document.getElementById('memberChips');w.innerHTML='';
-  MEMBERS.forEach(m=>{const c=document.createElement('div');c.className='chip'+(selMem.has(m.name)?' on':'');c.style.setProperty('--cc',m.color);c.setAttribute('role','checkbox');c.setAttribute('aria-checked',selMem.has(m.name)?'true':'false');c.setAttribute('tabindex','0');c.innerHTML=`<span class="dot"></span>${m.name}`;
-    const toggle=()=>{selMem.has(m.name)?selMem.delete(m.name):selMem.add(m.name);c.classList.toggle('on');c.setAttribute('aria-checked',selMem.has(m.name)?'true':'false');renderCB();};
-    c.onclick=toggle;c.onkeydown=e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();toggle();}};
-    w.appendChild(c);});
+  const w = document.getElementById('memberChips');
+  w.innerHTML = '';
+  MEMBERS.forEach(m=>{
+    const c = document.createElement('div');
+    c.className = 'chip' + (selMem.has(m.name)?' on':'');
+    c.style.setProperty('--cc', m.color);
+    c.setAttribute('role','checkbox');
+    c.setAttribute('aria-checked', selMem.has(m.name)?'true':'false');
+    c.setAttribute('tabindex','0');
+    c.innerHTML = `<span class="dot"></span>${m.name}`;
+    const toggle = ()=>{
+      selMem.has(m.name) ? selMem.delete(m.name) : selMem.add(m.name);
+      c.classList.toggle('on');
+      c.setAttribute('aria-checked', selMem.has(m.name)?'true':'false');
+      renderCB();
+    };
+    c.onclick = toggle;
+    c.onkeydown = e=>{ if(e.key===' '||e.key==='Enter'){e.preventDefault();toggle();} };
+    w.appendChild(c);
+  });
 }
 function renderKC(){
-  const w=document.getElementById('kchips');
-  const av=DB.knownGuests.filter(n=>!sessGuests.find(g=>g.name===n));
+  const w  = document.getElementById('kchips');
+  const av = DB.knownGuests.filter(n=>!sessGuests.find(g=>g.name===n));
   if(!av.length){w.innerHTML='';return;}
   w.innerHTML='<span style="font-family:JetBrains Mono;font-size:9px;color:var(--m3);letter-spacing:2px">RECENT: </span>';
-  av.forEach(n=>{const c=document.createElement('span');c.className='kchip';c.setAttribute('role','button');c.setAttribute('tabindex','0');c.textContent='+ '+n;c.onclick=()=>addGuestByName(n);c.onkeydown=e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();addGuestByName(n);}};w.appendChild(c);});
+  av.forEach(n=>{
+    const c = document.createElement('span');
+    c.className='kchip'; c.setAttribute('role','button'); c.setAttribute('tabindex','0');
+    c.textContent='+ '+n;
+    c.onclick=()=>addGuestByName(n);
+    c.onkeydown=e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();addGuestByName(n);}};
+    w.appendChild(c);
+  });
 }
-function addGuest(){const i=document.getElementById('guestInput');const n=i.value.trim();if(!n)return;i.value='';addGuestByName(n);}
-function addGuestByName(n){if(sessGuests.find(g=>g.name===n))return;sessGuests.push({name:n,payNow:false});renderSGC();renderKC();renderCB();}
-function removeGuest(n){sessGuests=sessGuests.filter(g=>g.name!==n);renderSGC();renderKC();renderCB();}
-function setGP(n,v){const g=sessGuests.find(g=>g.name===n);if(g){g.payNow=v;renderSGC();}}
+function addGuest(){ const i=document.getElementById('guestInput'); const n=i.value.trim(); if(!n)return; i.value=''; addGuestByName(n); }
+function addGuestByName(n){ if(sessGuests.find(g=>g.name===n))return; sessGuests.push({name:n,payNow:false}); renderSGC(); renderKC(); renderCB(); }
+function removeGuest(n){ sessGuests=sessGuests.filter(g=>g.name!==n); renderSGC(); renderKC(); renderCB(); }
+function setGP(n,v){ const g=sessGuests.find(g=>g.name===n); if(g){g.payNow=v;renderSGC();} }
 function renderSGC(){
-  const w=document.getElementById('sessionGcards');
+  const w = document.getElementById('sessionGcards');
   if(!sessGuests.length){w.innerHTML='';return;}
   w.innerHTML='';
-  sessGuests.forEach(g=>{const c=document.createElement('div');c.className='gcard';c.innerHTML=`<div class="gct"><span class="gcn">👤 ${g.name}</span><button class="gcrm" aria-label="Remove ${g.name}" onclick="removeGuest('${g.name}')">✕</button></div><div class="gcpl">COLLECT WHEN?</div><div class="ptog"><div class="po ${g.payNow?'now':''}" role="button" tabindex="0" onclick="setGP('${g.name}',true)">💰 After session</div><div class="po ${!g.payNow?'later':''}" role="button" tabindex="0" onclick="setGP('${g.name}',false)">📋 Settle later</div></div>`;w.appendChild(c);});
+  sessGuests.forEach(g=>{
+    const c = document.createElement('div');
+    c.className='gcard';
+    c.innerHTML=`<div class="gct"><span class="gcn">👤 ${g.name}</span><button class="gcrm" aria-label="Remove ${g.name}" onclick="removeGuest('${g.name}')">✕</button></div>
+    <div class="gcpl">COLLECT WHEN?</div>
+    <div class="ptog">
+      <div class="po ${g.payNow?'now':''}" role="button" tabindex="0" onclick="setGP('${g.name}',true)">💰 After session</div>
+      <div class="po ${!g.payNow?'later':''}" role="button" tabindex="0" onclick="setGP('${g.name}',false)">📋 Settle later</div>
+    </div>`;
+    w.appendChild(c);
+  });
   renderCB();
 }
 function logSession(){
-  const d=document.getElementById('fDate').value;
-  const sh=parseInt(document.getElementById('fStart').value);
-  const eh=parseInt(document.getElementById('fEnd').value);
-  const res=cC(getSc(d),sh,eh);
-  if(!res||selMem.size+sessGuests.length===0)return;
-  sessGuests.forEach(g=>{if(!DB.knownGuests.includes(g.name))DB.knownGuests.push(g.name);});
-  DB.sessions.unshift({id:Date.now(),date:d,startH:sh,endH:eh,cost:res.total,det:res.det,members:[...selMem],guests:sessGuests.map(g=>({...g}))});
-  saveDB();sessGuests=[];renderSGC();renderKC();renderCB();renderOV();
+  const d  = document.getElementById('fDate').value;
+  const sh = parseInt(document.getElementById('fStart').value);
+  const eh = parseInt(document.getElementById('fEnd').value);
+  const res = cC(getSc(d),sh,eh);
+  if(!res || selMem.size+sessGuests.length===0) return;
+
+  /* Double-check the hard cap server-side style */
+  const rem = remainingPts();
+  if(res.total > rem){ showToast('⚠ Not enough pts! Only '+rem+' left.'); renderCB(); return; }
+
+  sessGuests.forEach(g=>{ if(!DB.knownGuests.includes(g.name)) DB.knownGuests.push(g.name); });
+  DB.sessions.unshift({
+    id:Date.now(), date:d, startH:sh, endH:eh,
+    cost:res.total, det:res.det,
+    members:[...selMem],
+    guests:sessGuests.map(g=>({...g}))
+  });
+  saveDB();
+  sessGuests=[];
+  renderSGC(); renderKC(); renderCB(); renderOV();
   showToast(`Logged — ${res.total} pts`);
 }
 
-/* ══════════════════════════════════════════════════════
+/* ══════════════════════════════════════════
    STATS
-══════════════════════════════════════════════════════ */
+══════════════════════════════════════════ */
 function getStats(){
   const st={};
   MEMBERS.forEach(m=>st[m.name]={pts:0,sessions:0,det:[]});
   DB.sessions.forEach(s=>{
-    const ppl=s.members.length+s.guests.length;if(!ppl)return;
+    const ppl=s.members.length+s.guests.length; if(!ppl)return;
     const ppPts=s.cost/ppl;
     s.members.forEach(n=>{
       if(!st[n])return;
-      st[n].pts+=ppPts;
-      st[n].sessions++;
+      st[n].pts+=ppPts; st[n].sessions++;
       st[n].det.push({date:s.date,startH:s.startH,endH:s.endH,cost:s.cost,ppl,ppPts,ppRs:ppPts*PTS_RS});
     });
   });
   return st;
 }
 
-/* ══════════════════════════════════════════════════════
-   GUEST CASH DATA
-══════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════
+   GUEST DATA
+══════════════════════════════════════════ */
 function getGuestData(){
   let totalGuestMoney=0;
-  const held={};MEMBERS.forEach(m=>held[m.name]=0);
+  const held={};
+  MEMBERS.forEach(m=>held[m.name]=0);
   const det=[];
   DB.knownGuests.forEach(gn=>{
     DB.sessions.forEach(s=>{
-      if(!s.guests.find(g=>g.name===gn))return;
+      if(!s.guests.find(g=>g.name===gn)) return;
       const pmt=DB.payments[s.id+':'+gn];
-      if(!pmt)return;
+      if(!pmt) return;
       const ppl=s.members.length+s.guests.length;
       const rs=(s.cost/ppl)*PTS_RS;
-      totalGuestMoney+=rs;
-      held[pmt.receivedBy]+=rs;
+      totalGuestMoney+=rs; held[pmt.receivedBy]+=rs;
       det.push({gn,date:s.date,rs,by:pmt.receivedBy});
     });
   });
@@ -676,8 +1285,8 @@ function getGuestData(){
   const pending={};
   DB.knownGuests.forEach(gn=>{
     DB.sessions.forEach(s=>{
-      if(!s.guests.find(g=>g.name===gn))return;
-      if(DB.payments[s.id+':'+gn])return;
+      if(!s.guests.find(g=>g.name===gn)) return;
+      if(DB.payments[s.id+':'+gn]) return;
       const ppl=s.members.length+s.guests.length;
       pending[gn]=(pending[gn]||0)+(s.cost/ppl)*PTS_RS;
     });
@@ -685,15 +1294,14 @@ function getGuestData(){
   return{totalGuestMoney,totalGuestPts,held,det,pending};
 }
 
-/* ══════════════════════════════════════════════════════
-   SETTLEMENT
-══════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════
+   SETTLEMENT CALC
+══════════════════════════════════════════ */
 function calcSettle(){
   const stats=getStats();
   const{totalGuestMoney,totalGuestPts,held,det,pending}=getGuestData();
-  const guestPtsEach=totalGuestPts/N;
-  const guestMoneyEach=totalGuestMoney/N;
-  const totUsed=DB.sessions.reduce((a,s)=>a+s.cost,0);
+  const guestPtsEach=totalGuestPts/N, guestMoneyEach=totalGuestMoney/N;
+  const totUsed=usedPts();
   const result={};
   MEMBERS.forEach(m=>{
     const used=stats[m.name].pts;
@@ -701,17 +1309,21 @@ function calcSettle(){
     const usagePart=(effectivePts-PER_HEAD_PTS)*PTS_RS;
     const holdingPart=held[m.name]-guestMoneyEach;
     const final=usagePart+holdingPart;
-    result[m.name]={usedPts:used,effectivePts,usagePart,holdingPart,final,cashHeld:held[m.name],guestPtsEach,guestMoneyEach,sessions:stats[m.name].sessions,det:stats[m.name].det};
+    result[m.name]={
+      usedPts:used, effectivePts, usagePart, holdingPart, final,
+      cashHeld:held[m.name], guestPtsEach, guestMoneyEach,
+      sessions:stats[m.name].sessions, det:stats[m.name].det
+    };
   });
   return{result,totalGuestMoney,totalGuestPts,guestPtsEach,guestMoneyEach,pending,det,totUsed};
 }
 
-/* ══════════════════════════════════════════════════════
-   OVERVIEW RENDER
-══════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════
+   OVERVIEW
+══════════════════════════════════════════ */
 function renderOV(){
   const stats=getStats();
-  const used=DB.sessions.reduce((a,s)=>a+s.cost,0);
+  const used=usedPts();
   const rem=TOTAL_PTS-used;
   const pct=Math.min(100,used/TOTAL_PTS*100).toFixed(1);
   const nearEnd=rem<=MIN_BOOKING;
@@ -720,8 +1332,14 @@ function renderOV(){
   MEMBERS.forEach(m=>{
     const s=stats[m.name];
     const bw=Math.min(100,s.pts/PER_HEAD_PTS*100);
-    const el=document.createElement('div');el.className='mc';el.style.setProperty('--c',m.color);
-    el.innerHTML=`<div class="mcn">${m.name}</div><div class="mcs">${s.sessions} session${s.sessions!==1?'s':''}</div><div class="mcp">${R(s.pts).toLocaleString()}</div><div class="mcpl">PTS CONSUMED</div><div class="mcc">= ₹${R(s.pts*PTS_RS).toLocaleString()} of your ₹2,000</div><div class="bar"><div class="bf" style="width:${bw}%"></div></div>`;
+    const el=document.createElement('div');
+    el.className='mc'; el.style.setProperty('--c',m.color);
+    el.innerHTML=`<div class="mcn">${m.name}</div>
+      <div class="mcs">${s.sessions} session${s.sessions!==1?'s':''}</div>
+      <div class="mcp">${R(s.pts).toLocaleString()}</div>
+      <div class="mcpl">PTS CONSUMED</div>
+      <div class="mcc">= ₹${R(s.pts*PTS_RS).toLocaleString()} of your ₹2,000</div>
+      <div class="bar"><div class="bf" style="width:${bw}%"></div></div>`;
     grid.appendChild(el);
   });
   document.getElementById('stUsed').textContent=used.toLocaleString();
@@ -736,36 +1354,49 @@ function renderOV(){
   document.getElementById('poolBanner').classList.toggle('hide',!nearEnd);
 }
 
-/* ══════════════════════════════════════════════════════
+/* ══════════════════════════════════════════
    HISTORY
-══════════════════════════════════════════════════════ */
+══════════════════════════════════════════ */
 function renderHist(){
   const w=document.getElementById('histWrap');
   if(!DB.sessions.length){w.innerHTML='<div class="empty"><big>🏸</big>No sessions yet</div>';return;}
-  let h=`<div class="tw"><table class="stbl"><thead><tr><th scope="col">DATE</th><th scope="col">TIME</th><th scope="col">HRS</th><th scope="col">PTS</th><th scope="col">PLAYERS</th><th scope="col">PER HEAD</th><th scope="col" class="wo"><span class="sr-only">Actions</span></th></tr></thead><tbody>`;
+  let h=`<div class="tw"><table class="stbl">
+    <thead><tr>
+      <th scope="col">DATE</th><th scope="col">TIME</th><th scope="col">HRS</th>
+      <th scope="col">PTS</th><th scope="col">PLAYERS</th><th scope="col">PER HEAD</th>
+      <th scope="col" class="wo"><span class="sr-only">Actions</span></th>
+    </tr></thead><tbody>`;
   DB.sessions.forEach(s=>{
     const ppl=s.members.length+s.guests.length;
     const ppRs=R((s.cost/ppl)*PTS_RS);
     const mb=s.members.map(n=>`<span class="badge">${n}</span>`).join('');
     const gb=s.guests.map(g=>`<span class="badge ${g.payNow?'gn':'ge'}">👤 ${g.name}</span>`).join('');
-    h+=`<tr><td class="tdd">${fD(s.date)}</td><td class="tdt">${fH(s.startH)}–${fH(s.endH)}</td><td style="font-family:JetBrains Mono;font-size:10px">${s.endH-s.startH}h</td><td class="tdc">${s.cost}</td><td>${mb}${gb}</td><td class="tdp">÷${ppl}=₹${ppRs}/head</td><td class="wo"><button class="dbt" aria-label="Delete session on ${fD(s.date)}" onclick="delSess(${s.id})">✕</button></td></tr>`;
+    h+=`<tr>
+      <td class="tdd">${fD(s.date)}</td>
+      <td class="tdt">${fH(s.startH)}–${fH(s.endH)}</td>
+      <td class="thr">${s.endH-s.startH}h</td>
+      <td class="tdc">${s.cost}</td>
+      <td>${mb}${gb}</td>
+      <td class="tdp">÷${ppl}=₹${ppRs}/head</td>
+      <td class="wo"><button class="dbt" aria-label="Delete session on ${fD(s.date)}" onclick="delSess(${s.id})">✕</button></td>
+    </tr>`;
   });
   h+='</tbody></table></div>';
   w.innerHTML=h;
 }
-function delSess(id){DB.sessions=DB.sessions.filter(s=>s.id!==id);saveDB();renderHist();renderOV();showToast('Session removed');}
+function delSess(id){ DB.sessions=DB.sessions.filter(s=>s.id!==id); saveDB(); renderHist(); renderOV(); showToast('Session removed'); }
 
-/* ══════════════════════════════════════════════════════
+/* ══════════════════════════════════════════
    GUEST LEDGER
-══════════════════════════════════════════════════════ */
+══════════════════════════════════════════ */
 function renderGL(){
   const w=document.getElementById('guestLedger');
   if(!DB.knownGuests.length){w.innerHTML='<div class="glng">No guests logged yet.</div>';return;}
   let html='';
   DB.knownGuests.forEach(gn=>{
     const gsess=DB.sessions.filter(s=>s.guests.find(g=>g.name===gn));
-    if(!gsess.length)return;
-    let owes=0,paid=0,rows='';
+    if(!gsess.length) return;
+    let owes=0, paid=0, rows='';
     gsess.forEach(s=>{
       const ppl=s.members.length+s.guests.length;
       const rs=R((s.cost/ppl)*PTS_RS);
@@ -773,90 +1404,147 @@ function renderGL(){
       const pk=s.id+':'+gn;
       const pmt=DB.payments[pk];
       const ip=!!pmt;
-      if(ip)paid+=rs;else owes+=rs;
-      const mb=isManage?`<button class="glpb ${ip?'paid':''}" onclick="${ip?`unPay(${s.id},'${gn}')`:`openPT(${s.id},'${gn}',${rs})`}">${ip?'✓ Paid':'Mark Paid'}</button>`:'';
-      rows+=`<div class="glsr"><span class="glsd">${fD(s.date)}</span><span class="glsi">${fH(s.startH)}–${fH(s.endH)} · ${s.cost}pts÷${ppl}</span><span class="glsa">₹${rs}</span><span class="${gO.payNow?'gltn':'glte'}">${gO.payNow?'💰':'📋'}</span>${ip?`<span class="glco">→ ${pmt.receivedBy}</span>`:''}${mb}</div>`;
+      if(ip) paid+=rs; else owes+=rs;
+      const mb=isManage
+        ? `<button class="glpb ${ip?'paid':''}" onclick="${ip?`unPay(${s.id},'${gn}')`:`openPT(${s.id},'${gn}',${rs})`}">${ip?'✓ Paid':'Mark Paid'}</button>`
+        : '';
+      rows+=`<div class="glsr">
+        <span class="glsd">${fD(s.date)}</span>
+        <span class="glsi">${fH(s.startH)}–${fH(s.endH)} · ${s.cost}pts÷${ppl}</span>
+        <span class="glsa">₹${rs}</span>
+        <span class="${gO.payNow?'gltn':'glte'}">${gO.payNow?'💰':'📋'}</span>
+        ${ip?`<span class="glco">→ ${pmt.receivedBy}</span>`:''}
+        ${mb}
+      </div>`;
     });
-    html+=`<div class="glr"><div class="glt"><div class="gln">👤 ${gn}</div><div class="glnu">${owes>0?`<div class="owes">₹${owes} owes</div>`:''}${paid>0?`<div class="paidl">₹${paid} paid ✓</div>`:''}</div></div><div>${rows}</div></div>`;
+    html+=`<div class="glr">
+      <div class="glt">
+        <div class="gln">👤 ${gn}</div>
+        <div>${owes>0?`<div class="owes">₹${owes} owes</div>`:''}${paid>0?`<div class="paidl">₹${paid} paid ✓</div>`:''}</div>
+      </div>
+      <div>${rows}</div>
+    </div>`;
   });
   w.innerHTML=html||'<div class="glng">No guest sessions.</div>';
 }
 let _ptc=null;
-function openPT(sid,gn,rs){_ptc={sid,gn,rs};document.getElementById('payToSub').textContent=`👤 ${gn} paid ₹${rs} — who received it?`;document.getElementById('payToOpts').innerHTML=MEMBERS.map(m=>`<div class="ptoo" role="button" tabindex="0" onclick="confirmPT('${m.name}')">${m.name}<span>received ₹${rs}</span></div>`).join('');document.getElementById('payToModal').classList.add('open');}
-function closePT(){document.getElementById('payToModal').classList.remove('open');_ptc=null;}
-function confirmPT(name){if(!_ptc)return;DB.payments[_ptc.sid+':'+_ptc.gn]={receivedBy:name};saveDB();closePT();renderGL();showToast(`₹${_ptc.rs} recorded → ${name}`);}
-function unPay(sid,gn){delete DB.payments[sid+':'+gn];saveDB();renderGL();showToast('Payment unmarked');}
+function openPT(sid,gn,rs){
+  _ptc={sid,gn,rs};
+  document.getElementById('payToSub').textContent=`👤 ${gn} paid ₹${rs} — who received it?`;
+  document.getElementById('payToOpts').innerHTML=MEMBERS.map(m=>
+    `<div class="ptoo" role="button" tabindex="0" onclick="confirmPT('${m.name}')">${m.name}<span>received ₹${rs}</span></div>`
+  ).join('');
+  document.getElementById('payToModal').classList.add('open');
+}
+function closePT(){ document.getElementById('payToModal').classList.remove('open'); _ptc=null; }
+function confirmPT(name){
+  if(!_ptc) return;
+  DB.payments[_ptc.sid+':'+_ptc.gn]={receivedBy:name};
+  saveDB(); closePT(); renderGL();
+  showToast(`₹${_ptc.rs} recorded → ${name}`);
+}
+function unPay(sid,gn){ delete DB.payments[sid+':'+gn]; saveDB(); renderGL(); showToast('Payment unmarked'); }
 
-/* ══════════════════════════════════════════════════════
+/* ══════════════════════════════════════════
    SETTLEMENT TAB
-══════════════════════════════════════════════════════ */
+══════════════════════════════════════════ */
 function renderSettle(){
   const w=document.getElementById('settleRows');
-  const used=DB.sessions.reduce((a,s)=>a+s.cost,0);
-  if(!used){w.innerHTML='<div class="se">Log sessions to see settlement.</div>';document.getElementById('calcWrap').classList.add('cw-h');return;}
+  const used=usedPts();
+  if(!used){ w.innerHTML='<div class="se">Log sessions to see settlement.</div>'; document.getElementById('calcWrap').classList.add('cw-h'); return; }
   const{result,totalGuestMoney,pending}=calcSettle();
   let html='';
   MEMBERS.forEach(m=>{
     const mem=MEMBERS.find(x=>x.name===m.name);
-    const r=result[m.name];
-    const f=r.final;
+    const r=result[m.name]; const f=r.final;
     const cls=Math.abs(f)<0.5?'c-ev':f>0?'c-pay':'c-rcv';
     const ds=Math.abs(f)<0.5?'✓ All square':f>0?`Pays ₹${R(f)}`:`Receives ₹${R(-f)}`;
     html+=`<div class="srow" style="--rc:${mem.color}" role="button" tabindex="0" aria-label="${m.name}: ${ds}" onclick="openMM('${m.name}')">
       <div class="sra"></div>
       <div class="snm" style="color:${mem.color}">${m.name}</div>
       <div class="sdt">${R(r.usedPts)} pts own · ${R(r.effectivePts)} pts effective<br><strong>${ds}</strong></div>
-      <div class="samc"><div class="sam ${cls}">${Math.abs(f)<0.5?'±₹0':f>0?'+₹'+R(f).toLocaleString():'-₹'+R(-f).toLocaleString()}</div><span class="saml">${f>0.5?'PAYS':f<-0.5?'RECEIVES':'SQUARE'}</span></div>
+      <div class="samc">
+        <div class="sam ${cls}">${Math.abs(f)<0.5?'±₹0':f>0?'+₹'+R(f).toLocaleString():'-₹'+R(-f).toLocaleString()}</div>
+        <span class="saml">${f>0.5?'PAYS':f<-0.5?'RECEIVES':'SQUARE'}</span>
+      </div>
       <div class="schev" aria-hidden="true">›</div>
     </div>`;
   });
   const tp=Object.values(pending).reduce((a,v)=>a+v,0);
-  if(tp>0)html+=`<div class="pn" role="alert">⚠ <span class="pna">₹${R(tp)} still pending from guests</span> — mark paid in Guest tab first for accurate settlement.</div>`;
+  if(tp>0) html+=`<div class="pn" role="alert">⚠ <span class="pna">₹${R(tp)} still pending from guests</span> — mark paid in Guest tab first for accurate settlement.</div>`;
   w.innerHTML=html;
   document.getElementById('calcWrap').classList.remove('cw-h');
 }
 
-/* ══════════════════════════════════════════════════════
+/* ══════════════════════════════════════════
    MEMBER DETAIL MODAL
-══════════════════════════════════════════════════════ */
+══════════════════════════════════════════ */
 function openMM(name){
   const mem=MEMBERS.find(m=>m.name===name);
   const{result,totalGuestMoney,totalGuestPts,guestPtsEach,guestMoneyEach,det}=calcSettle();
-  const r=result[name];
-  const f=r.final;
+  const r=result[name]; const f=r.final;
   let sessRows='';
   r.det.forEach(d=>{
-    sessRows+=`<tr><td style="font-family:JetBrains Mono;font-size:10px">${fD(d.date)}</td><td style="font-family:JetBrains Mono;font-size:10px;color:var(--m3)">${fH(d.startH)}–${fH(d.endH)}</td><td style="font-family:JetBrains Mono;font-size:10px;color:var(--m3)">${d.ppl} players</td><td style="font-family:Bebas Neue;font-size:15px;color:var(--a)">${R(d.ppPts)} pts</td><td style="font-family:JetBrains Mono;font-size:10px;color:var(--a2)">₹${R(d.ppRs)}</td></tr>`;
+    sessRows+=`<tr>
+      <td class="mtd-date">${fD(d.date)}</td>
+      <td class="mtd-time">${fH(d.startH)}–${fH(d.endH)}</td>
+      <td class="mtd-ppl">${d.ppl} players</td>
+      <td class="mtd-pts">${R(d.ppPts)} pts</td>
+      <td class="mtd-rs">₹${R(d.ppRs)}</td>
+    </tr>`;
   });
-  if(!sessRows)sessRows=`<tr><td colspan="5" style="text-align:center;color:var(--m3);padding:12px;font-family:JetBrains Mono;font-size:10px">No sessions played</td></tr>`;
+  if(!sessRows) sessRows=`<tr><td colspan="5" style="text-align:center;color:var(--m3);padding:12px;font-family:'JetBrains Mono';font-size:10px">No sessions played</td></tr>`;
   let gRows='';
-  det.forEach(g=>{gRows+=`<tr><td style="font-family:Bebas Neue;font-size:14px;letter-spacing:1px;color:var(--a3)">👤 ${g.gn}</td><td style="font-family:JetBrains Mono;font-size:10px">${fD(g.date)}</td><td style="font-family:Bebas Neue;font-size:14px;color:var(--go)">₹${R(g.rs)}</td><td style="font-family:JetBrains Mono;font-size:10px;color:${g.by===name?'var(--a)':'var(--m3)'}">${g.by===name?'YOU 💰':g.by}</td></tr>`;});
+  det.forEach(g=>{
+    gRows+=`<tr>
+      <td class="mtd-gname">👤 ${g.gn}</td>
+      <td class="mtd-gdate">${fD(g.date)}</td>
+      <td class="mtd-gpaid">₹${R(g.rs)}</td>
+      <td style="font-family:'JetBrains Mono';font-size:10px;color:${g.by===name?'var(--a)':'var(--m3)'}">${g.by===name?'YOU 💰':g.by}</td>
+    </tr>`;
+  });
   const balCls=Math.abs(f)<0.5?'ev':f>0?'pay':'rcv';
   const balColor=Math.abs(f)<0.5?'var(--m3)':f>0?'var(--a3)':'var(--a)';
   const finalStr=Math.abs(f)<0.5?'±₹0':f>0?`+₹${R(f).toLocaleString()}`:`-₹${R(-f).toLocaleString()}`;
+  const usagePosNeg=r.effectivePts>=PER_HEAD_PTS?'+':'-';
+  const diffPts=Math.abs(R(r.effectivePts-PER_HEAD_PTS));
   document.getElementById('mmBody').innerHTML=`
     <div class="mdhd">
       <div class="mddot" style="background:${mem.color}"></div>
-      <div><div class="mdnm" style="color:${mem.color}">${name}</div><div class="mdsb">${r.sessions} session${r.sessions!==1?'s':''} · ${R(r.usedPts)} pts own usage</div></div>
+      <div>
+        <div class="mdnm" style="color:${mem.color}">${name}</div>
+        <div class="mdsb">${r.sessions} session${r.sessions!==1?'s':''} · ${R(r.usedPts)} pts own usage</div>
+      </div>
     </div>
     <div class="sgrid">
       <div class="sbox"><div class="sbv" style="color:${mem.color}">${R(r.usedPts).toLocaleString()}</div><div class="sbl">OWN PTS USED</div><div class="sbn">from your sessions only</div></div>
       <div class="sbox"><div class="sbv" style="color:var(--a2)">${R(guestPtsEach).toLocaleString()}</div><div class="sbl">GUEST BURDEN SHARE</div><div class="sbn">${R(totalGuestPts)} guest pts ÷ ${N}</div></div>
-      <div class="sbox"><div class="sbv" style="color:var(--tx)">${R(r.effectivePts).toLocaleString()}</div><div class="sbl">EFFECTIVE PTS TOTAL</div><div class="sbn">own + guest share vs 2500 owned</div></div>
+      <div class="sbox"><div class="sbv" style="color:var(--tx)">${R(r.effectivePts).toLocaleString()}</div><div class="sbl">EFFECTIVE PTS TOTAL</div><div class="sbn">own + guest share vs 2500</div></div>
       <div class="sbox"><div class="sbv" style="color:var(--go)">${r.cashHeld>0?'₹'+R(r.cashHeld).toLocaleString():'₹0'}</div><div class="sbl">GUEST CASH HELD</div><div class="sbn">fair share = ₹${R(guestMoneyEach)} each</div></div>
     </div>
     <div class="msh">SESSIONS PLAYED</div>
-    <div style="background:var(--s2);border:1px solid var(--bo);border-radius:11px;overflow:hidden;margin-bottom:16px"><table class="mt"><thead><tr><th scope="col">DATE</th><th scope="col">TIME</th><th scope="col">PLAYERS</th><th scope="col">YOUR PTS</th><th scope="col">IN ₹</th></tr></thead><tbody>${sessRows}</tbody></table></div>
-    ${det.length?`<div class="msh">GUEST CASH (all payments)</div><div style="background:var(--s2);border:1px solid var(--bo);border-radius:11px;overflow:hidden;margin-bottom:16px"><table class="mt"><thead><tr><th scope="col">GUEST</th><th scope="col">DATE</th><th scope="col">PAID</th><th scope="col">COLLECTED BY</th></tr></thead><tbody>${gRows}</tbody></table></div>`:''}
+    <div class="mtbl-wrap">
+      <table class="mt">
+        <thead><tr><th scope="col">DATE</th><th scope="col">TIME</th><th scope="col">PLAYERS</th><th scope="col">YOUR PTS</th><th scope="col">IN ₹</th></tr></thead>
+        <tbody>${sessRows}</tbody>
+      </table>
+    </div>
+    ${det.length?`<div class="msh">GUEST CASH (all payments)</div>
+    <div class="mtbl-wrap">
+      <table class="mt">
+        <thead><tr><th scope="col">GUEST</th><th scope="col">DATE</th><th scope="col">PAID</th><th scope="col">COLLECTED BY</th></tr></thead>
+        <tbody>${gRows}</tbody>
+      </table>
+    </div>`:''}
     <div class="fbox">
       <div class="fbox-title">STEP-BY-STEP FORMULA</div>
-      <div class="fline"><span class="fline-lbl">STEP 1 — Usage fairness</span><span></span></div>
+      <div class="fline"><span class="fline-lbl fline-step">STEP 1 — Usage fairness</span><span></span></div>
       <div class="fline"><span class="fline-lbl">Own pts used</span><span class="fline-val">${R(r.usedPts)} pts</span></div>
       <div class="fline"><span class="fline-lbl">+ Guest burden share (${R(totalGuestPts)} ÷ ${N})</span><span class="fline-val">+ ${R(guestPtsEach)} pts</span></div>
       <div class="fline"><span class="fline-lbl">= Effective pts total</span><span class="fline-val">${R(r.effectivePts)} pts</span></div>
-      <div class="fline"><span class="fline-lbl">− Owned pts (2500)</span><span class="fline-val" style="color:${r.effectivePts>=PER_HEAD_PTS?'var(--a3)':'var(--a)'}">− 2500 pts = ${r.effectivePts>=PER_HEAD_PTS?'+':'-'}${Math.abs(R(r.effectivePts-PER_HEAD_PTS))} pts</span></div>
+      <div class="fline"><span class="fline-lbl">− Owned pts (2500)</span><span class="fline-val" style="color:${r.effectivePts>=PER_HEAD_PTS?'var(--a3)':'var(--a)'}">−2500 = ${usagePosNeg}${diffPts} pts</span></div>
       <div class="fline"><span class="fline-lbl">× ₹0.8 = Usage part</span><span class="fline-val" style="color:${r.usagePart>0?'var(--a3)':'var(--a)'}">${r.usagePart>0?'+':''}₹${R(r.usagePart)}</span></div>
-      <div class="fline" style="margin-top:8px"><span class="fline-lbl">STEP 2 — Cash fairness</span><span></span></div>
+      <div class="fline fline-step"><span class="fline-lbl">STEP 2 — Cash fairness</span><span></span></div>
       <div class="fline"><span class="fline-lbl">Guest cash held by you</span><span class="fline-val">₹${R(r.cashHeld)}</span></div>
       <div class="fline"><span class="fline-lbl">− Fair share (₹${R(totalGuestMoney)} ÷ ${N})</span><span class="fline-val" style="color:${r.holdingPart>0?'var(--a3)':'var(--a)'}">${r.holdingPart>0?'+':''}₹${R(r.holdingPart)}</span></div>
       <div class="fline fline-total"><span class="fline-lbl">FINAL</span><span class="fline-val" style="color:${balColor}">${finalStr}</span></div>
@@ -864,64 +1552,84 @@ function openMM(name){
     <div class="bb ${balCls}">
       <div class="bbt">${Math.abs(f)<0.5?'ALL SQUARE':f>0?'YOU PAY':'YOU RECEIVE'}</div>
       <div class="bbv" style="color:${balColor}">${finalStr}</div>
-      <div class="bbd" style="color:var(--m3)">${Math.abs(f)<0.5?'Your usage and cash holdings are perfectly balanced.':f>0?`You used more than your share (or hold excess guest cash). Pay ₹${R(f)} to settle.`:`You used less than your share (or hold less guest cash). Receive ₹${R(-f)} from others.`}</div>
+      <div class="bbd">${Math.abs(f)<0.5?'Your usage and cash holdings are perfectly balanced.':f>0?`You used more than your share. Pay ₹${R(f)} to settle.`:`You used less than your share. Receive ₹${R(-f)} from others.`}</div>
     </div>`;
   document.getElementById('memberModal').classList.add('open');
 }
-function closeMM(){document.getElementById('memberModal').classList.remove('open');}
+function closeMM(){ document.getElementById('memberModal').classList.remove('open'); }
 
-/* ══════════════════════════════════════════════════════
+/* ══════════════════════════════════════════
    FINAL CALCULATE MODAL
-══════════════════════════════════════════════════════ */
+══════════════════════════════════════════ */
 function openFinal(){
   const{result,totalGuestMoney,totalGuestPts,guestPtsEach,guestMoneyEach,pending,totUsed}=calcSettle();
   document.getElementById('finalSub').textContent=`${totUsed.toLocaleString()} / ${TOTAL_PTS.toLocaleString()} pts · ${DB.sessions.length} sessions · ₹${R(totalGuestMoney)} guest cash`;
-  const payers=MEMBERS.filter(m=>result[m.name].final>0.5).map(m=>({name:m.name,amt:result[m.name].final,color:MEMBERS.find(x=>x.name===m.name).color})).sort((a,b)=>b.amt-a.amt);
-  const recvrs=MEMBERS.filter(m=>result[m.name].final<-0.5).map(m=>({name:m.name,amt:-result[m.name].final,color:MEMBERS.find(x=>x.name===m.name).color})).sort((a,b)=>b.amt-a.amt);
-  const txns=[];
-  const p=payers.map(x=>({...x}));
-  const r=recvrs.map(x=>({...x}));
-  let pi=0,ri=0;
-  while(pi<p.length&&ri<r.length){const amt=Math.min(p[pi].amt,r[ri].amt);if(amt>0.5)txns.push({from:p[pi].name,to:r[ri].name,amt:R(amt),fc:p[pi].color,tc:r[ri].color});p[pi].amt-=amt;r[ri].amt-=amt;if(p[pi].amt<0.5)pi++;if(r[ri].amt<0.5)ri++;}
+  const payers=MEMBERS.filter(m=>result[m.name].final>0.5)
+    .map(m=>({name:m.name,amt:result[m.name].final,color:MEMBERS.find(x=>x.name===m.name).color}))
+    .sort((a,b)=>b.amt-a.amt);
+  const recvrs=MEMBERS.filter(m=>result[m.name].final<-0.5)
+    .map(m=>({name:m.name,amt:-result[m.name].final,color:MEMBERS.find(x=>x.name===m.name).color}))
+    .sort((a,b)=>b.amt-a.amt);
+  const txns=[]; const p=payers.map(x=>({...x})); const r=recvrs.map(x=>({...x}));
+  let pi=0, ri=0;
+  while(pi<p.length && ri<r.length){
+    const amt=Math.min(p[pi].amt,r[ri].amt);
+    if(amt>0.5) txns.push({from:p[pi].name,to:r[ri].name,amt:R(amt),fc:p[pi].color,tc:r[ri].color});
+    p[pi].amt-=amt; r[ri].amt-=amt;
+    if(p[pi].amt<0.5) pi++;
+    if(r[ri].amt<0.5) ri++;
+  }
   const sumCheck=MEMBERS.reduce((a,m)=>a+result[m.name].final,0);
   let body=`<div class="tsec"><div class="tsl">TRANSFERS</div>`;
-  if(!txns.length)body+=`<div class="ag">✓ All square — no transfers needed!</div>`;
-  else txns.forEach(t=>{body+=`<div class="tr"><div class="tf" style="color:${t.fc}">${t.from}</div><div class="ta">pays →</div><div class="tt" style="color:${t.tc}">${t.to}</div><div class="tam">₹${t.amt.toLocaleString()}</div></div>`;});
+  if(!txns.length) body+=`<div class="ag">✓ All square — no transfers needed!</div>`;
+  else txns.forEach(t=>{ body+=`<div class="tr"><div class="tf" style="color:${t.fc}">${t.from}</div><div class="ta">pays →</div><div class="tt" style="color:${t.tc}">${t.to}</div><div class="tam">₹${t.amt.toLocaleString()}</div></div>`; });
   body+=`</div>`;
   const ge=Object.entries(pending).filter(([,v])=>v>0.5);
   body+=`<div class="tsec"><div class="tsl">GUESTS STILL NEED TO PAY</div>`;
-  if(!ge.length)body+=`<div class="ag">✓ All guest payments collected!</div>`;
-  else ge.forEach(([gn,amt])=>{body+=`<div class="tr"><div class="tf tgc">👤 ${gn}</div><div class="ta">owes →</div><div class="tt tany">collector</div><div class="tamg">₹${R(amt).toLocaleString()}</div></div>`;});
-  body+=`</div>`;
-  body+=`<div class="tsec"><div class="tsl">PER MEMBER SUMMARY</div>`;
-  MEMBERS.forEach(m=>{const mem=MEMBERS.find(x=>x.name===m.name);const r2=result[m.name];const f=r2.final;body+=`<div class="tr"><div class="tf" style="color:${mem.color}">${m.name}</div><div class="tams" style="color:${Math.abs(f)<0.5?'var(--m3)':f>0?'var(--a3)':'var(--a)'}">${Math.abs(f)<0.5?'±₹0':f>0?`+₹${R(f)}`:`-₹${R(-f)}`}</div><div class="tn">Own: ${R(r2.usedPts)}pts &nbsp;+&nbsp; Guest share: ${R(r2.guestPtsEach)}pts &nbsp;=&nbsp; ${R(r2.effectivePts)}pts effective &nbsp;vs&nbsp; 2500 owned &nbsp;→&nbsp; usage ₹${R(r2.usagePart)>=0?'+':''}${R(r2.usagePart)} &nbsp;+&nbsp; cash held ₹${R(r2.cashHeld)} vs fair ₹${R(r2.guestMoneyEach)} &nbsp;→&nbsp; holding ${R(r2.holdingPart)>=0?'+':''}₹${R(r2.holdingPart)} &nbsp;=&nbsp; <strong>${Math.abs(f)<0.5?'square':f>0?'PAYS ₹'+R(f):'RECEIVES ₹'+R(-f)}</strong></div></div>`;});
-  body+=`<div class="tn" style="padding:10px 0;border-top:1px solid var(--bo);margin-top:4px;color:var(--m3)">Guest pts: ${R(totalGuestPts)} ÷ ${N} = ${R(guestPtsEach)} each &nbsp;·&nbsp; Guest money: ₹${R(totalGuestMoney)} ÷ ${N} = ₹${R(guestMoneyEach)} each &nbsp;·&nbsp; Sum check: ₹${sumCheck.toFixed(1)} ≈ 0 ${Math.abs(sumCheck)<2?'✓':'⚠'}</div></div>`;
+  if(!ge.length) body+=`<div class="ag">✓ All guest payments collected!</div>`;
+  else ge.forEach(([gn,amt])=>{ body+=`<div class="tr"><div class="tf tgc">👤 ${gn}</div><div class="ta">owes →</div><div class="tt tany">collector</div><div class="tamg">₹${R(amt).toLocaleString()}</div></div>`; });
+  body+=`</div><div class="tsec"><div class="tsl">PER MEMBER SUMMARY</div>`;
+  MEMBERS.forEach(m=>{
+    const mem=MEMBERS.find(x=>x.name===m.name);
+    const r2=result[m.name]; const f=r2.final;
+    body+=`<div class="tr">
+      <div class="tf" style="color:${mem.color}">${m.name}</div>
+      <div class="tams" style="color:${Math.abs(f)<0.5?'var(--m3)':f>0?'var(--a3)':'var(--a)'}">${Math.abs(f)<0.5?'±₹0':f>0?`+₹${R(f)}`:`-₹${R(-f)}`}</div>
+      <div class="tn">Own: ${R(r2.usedPts)}pts + Guest: ${R(r2.guestPtsEach)}pts = ${R(r2.effectivePts)}pts vs 2500 → usage ${R(r2.usagePart)>=0?'+':''}₹${R(r2.usagePart)} + holding ${R(r2.holdingPart)>=0?'+':''}₹${R(r2.holdingPart)} = <strong>${Math.abs(f)<0.5?'square':f>0?'PAYS ₹'+R(f):'RECEIVES ₹'+R(-f)}</strong></div>
+    </div>`;
+  });
+  body+=`<div class="tn" style="padding:10px 0;border-top:1px solid var(--bo);margin-top:4px;color:var(--m3)">Sum check: ₹${sumCheck.toFixed(1)} ≈ 0 ${Math.abs(sumCheck)<2?'✓':'⚠'} · Guest pts ÷5 = ${R(guestPtsEach)} · Guest money ÷5 = ₹${R(guestMoneyEach)}</div></div>`;
   document.getElementById('finalBody').innerHTML=body;
   document.getElementById('finalModal').classList.add('open');
 }
-function closeFinal(){document.getElementById('finalModal').classList.remove('open');}
+function closeFinal(){ document.getElementById('finalModal').classList.remove('open'); }
 
-/* ══════════════════════════════════════════════════════
+/* ══════════════════════════════════════════
    TOAST
-══════════════════════════════════════════════════════ */
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
+══════════════════════════════════════════ */
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
 
-/* ══════════════════════════════════════════════════════
-   KEYBOARD: close modals on Escape
-══════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════
+   KEYBOARD
+══════════════════════════════════════════ */
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){
-    ['payToModal','memberModal','finalModal','credsModal'].forEach(id=>{document.getElementById(id).classList.remove('open');});
+    ['rateModal','payToModal','memberModal','finalModal','credsModal']
+      .forEach(id=>document.getElementById(id).classList.remove('open'));
   }
 });
 
-/* ══════════════════════════════════════════════════════
+/* ══════════════════════════════════════════
    INIT
-══════════════════════════════════════════════════════ */
+══════════════════════════════════════════ */
 function init(){
   applyTheme(localStorage.getItem('cp_theme')||'dark');
-  document.getElementById('fDate').valueAsDate=new Date();
-  onDC();renderMC();renderKC();renderOV();
+  document.getElementById('fDate').valueAsDate = new Date();
+  onDC(); renderMC(); renderKC(); renderOV();
 }
 </script>
 </body>
