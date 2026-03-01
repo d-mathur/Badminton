@@ -670,12 +670,7 @@ input[type=date]{font-size:14px}
   .chip:active{opacity:.7}
   .mc:active{transform:translateY(-2px)}
   .bcalc:active{transform:translateY(-2px)}
-  .glpb:active{border-color:var(--a);color:var(--a);opacity:.7}
-  .dbt:active{border-color:var(--a3);color:var(--a3)}
-  .ptoo:active{border-color:var(--a);color:var(--a)}
 }
-/* tappable dynamic elements */
-.srow,.glpb,.dbt,.ptoo{-webkit-tap-highlight-color:transparent;cursor:pointer;touch-action:manipulation}
 </style>
 </head>
 <body>
@@ -1558,15 +1553,11 @@ function renderHist(){
       <td class="tdc">${s.cost}</td>
       <td>${mb}${gb}</td>
       <td class="tdp">÷${ppl}=₹${ppRs}/head</td>
-      <td class="wo"><button class="dbt" aria-label="Delete session on ${fD(s.date)}" data-id="${s.id}">✕</button></td>
+      <td class="wo"><button class="dbt" aria-label="Delete session on ${fD(s.date)}" onclick="delSess(${s.id})">✕</button></td>
     </tr>`;
   });
   h+='</tbody></table></div>';
   w.innerHTML=h;
-  w.ontouchend = w.onclick = function(e){
-    const btn = e.target.closest('.dbt');
-    if(btn){ e.preventDefault(); delSess(Number(btn.dataset.id)); }
-  };
 }
 function delSess(id){ DB.sessions=DB.sessions.filter(s=>s.id!==id); saveDB(); renderHist(); renderOV(); showToast('Session removed'); }
 
@@ -1590,7 +1581,7 @@ function renderGL(){
       const ip=!!pmt;
       if(ip) paid+=rs; else owes+=rs;
       const mb=isManage
-        ? `<button class="glpb ${ip?'paid':''}" data-action="${ip?'unpay':'pay'}" data-sid="${s.id}" data-gn="${gn}" data-rs="${rs}">${ip?'✓ Paid':'Mark Paid'}</button>`
+        ? `<button class="glpb ${ip?'paid':''}" onclick="${ip?`unPay(${s.id},'${gn}')`:`openPT(${s.id},'${gn}',${rs})`}">${ip?'✓ Paid':'Mark Paid'}</button>`
         : '';
       rows+=`<div class="glsr">
         <span class="glsd">${fD(s.date)}</span>
@@ -1610,29 +1601,15 @@ function renderGL(){
     </div>`;
   });
   w.innerHTML=html||'<div class="glng">No guest sessions.</div>';
-  w.ontouchend = w.onclick = function(e){
-    const btn = e.target.closest('.glpb');
-    if(btn){
-      e.preventDefault();
-      const {action, sid, gn, rs} = btn.dataset;
-      if(action==='unpay') unPay(Number(sid), gn);
-      else openPT(Number(sid), gn, Number(rs));
-    }
-  };
 }
 let _ptc=null;
 function openPT(sid,gn,rs){
   _ptc={sid,gn,rs};
   document.getElementById('payToSub').textContent=`👤 ${gn} paid ₹${rs} — who received it?`;
   document.getElementById('payToOpts').innerHTML=MEMBERS.map(m=>
-    `<div class="ptoo" role="button" tabindex="0" data-name="${m.name}">${m.name}<span>received ₹${rs}</span></div>`
+    `<div class="ptoo" role="button" tabindex="0" onclick="confirmPT('${m.name}')">${m.name}<span>received ₹${rs}</span></div>`
   ).join('');
   document.getElementById('payToModal').classList.add('open');
-  const opts = document.getElementById('payToOpts');
-  opts.ontouchend = opts.onclick = function(e){
-    const el = e.target.closest('.ptoo');
-    if(el){ e.preventDefault(); confirmPT(el.dataset.name); }
-  };
 }
 function closePT(){ document.getElementById('payToModal').classList.remove('open'); _ptc=null; }
 function confirmPT(name){
@@ -1658,7 +1635,7 @@ function renderSettle(){
     const r=result[m.name]; const f=r.final;
     const cls=Math.abs(f)<0.5?'c-ev':f>0?'c-pay':'c-rcv';
     const ds=Math.abs(f)<0.5?'✓ All square':f>0?`Pays ₹${R(f)}`:`Receives ₹${R(-f)}`;
-    html+=`<div class="srow" style="--rc:${mem.color}" role="button" tabindex="0" aria-label="${m.name}: ${ds}" data-name="${m.name}">
+    html+=`<div class="srow" style="--rc:${mem.color}" role="button" tabindex="0" aria-label="${m.name}: ${ds}" onclick="openMM('${m.name}')">
       <div class="sra"></div>
       <div class="snm" style="color:${mem.color}">${m.name}</div>
       <div class="sdt">${R(r.usedPts)} pts own · ${R(r.effectivePts)} pts effective<br><strong>${ds}</strong></div>
@@ -1672,10 +1649,6 @@ function renderSettle(){
   const tp=Object.values(pending).reduce((a,v)=>a+v,0);
   if(tp>0) html+=`<div class="pn" role="alert">⚠ <span class="pna">₹${R(tp)} still pending from guests</span> — mark paid in Guest tab first for accurate settlement.</div>`;
   w.innerHTML=html;
-  w.ontouchend = w.onclick = function(e){
-    const row = e.target.closest('.srow');
-    if(row){ e.preventDefault(); openMM(row.dataset.name); }
-  };
   document.getElementById('calcWrap').classList.remove('cw-h');
 }
 
