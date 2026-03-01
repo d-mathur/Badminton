@@ -1,0 +1,24 @@
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyB4grQh8o6mKiuu4Rf8385UtlWjI6SUUSY",
+    authDomain: "badminton-8166a.firebaseapp.com",
+    databaseURL: "https://badminton-8166a-default-rtdb.firebaseio.com",
+    projectId: "badminton-8166a",
+    storageBucket: "badminton-8166a.firebasestorage.app",
+    messagingSenderId: "125599917383",
+    appId: "1:125599917383:web:0c272c1c7072b49a1c1862",
+    measurementId: "G-RJ9NM4RLJ2"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>

@@ -38,21 +38,6 @@ body{
 ::-webkit-scrollbar-thumb{background:var(--b2);border-radius:4px}
 input[type=date]::-webkit-calendar-picker-indicator{filter:var(--cal);cursor:pointer;opacity:.7}
 
-/* ── LOADING OVERLAY ── */
-#loadingOverlay{
-  position:fixed;inset:0;z-index:3000;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  background:var(--bg);gap:16px;
-}
-#loadingOverlay.hide{display:none}
-.spinner{
-  width:40px;height:40px;border:3px solid var(--bo);
-  border-top-color:var(--a);border-radius:50%;
-  animation:spin .8s linear infinite;
-}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading-text{font-family:'JetBrains Mono';font-size:11px;color:var(--m3);letter-spacing:3px}
-
 /* ── SPLASH ── */
 #splash{
   position:fixed;inset:0;z-index:2000;
@@ -146,15 +131,6 @@ header{
 .ppill strong{color:var(--a);font-size:17px;display:block;font-family:'Bebas Neue';letter-spacing:1px;line-height:1.1}
 .ppill.low strong{color:var(--a3)}
 .ppill.warn strong{color:var(--go)}
-/* sync indicator */
-.sync-dot{
-  width:8px;height:8px;border-radius:50%;background:var(--a);
-  display:inline-block;margin-left:4px;flex-shrink:0;
-  transition:background .3s;
-}
-.sync-dot.syncing{background:var(--go);animation:pulse .8s ease-in-out infinite}
-.sync-dot.error{background:var(--a3)}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 .ibt{
   background:var(--su);border:1px solid var(--bo);border-radius:9px;
   padding:7px 11px;cursor:pointer;font-size:15px;
@@ -584,13 +560,17 @@ input[type=date]{font-size:14px}
 
 /* screen-reader only */
 .sr-only{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+/* table wrapper in member modal */
 .mtbl-wrap{background:var(--s2);border:1px solid var(--bo);border-radius:11px;overflow:hidden;margin-bottom:16px}
+/* modal title color variants */
 .mti-blue{color:var(--a2)}
 .mti-gold{color:var(--go)}
 .mti-green{color:var(--a)}
+/* rate day title colors */
 .rday-green{color:var(--a)}
 .rday-blue{color:var(--a2)}
 .rday-gold{color:var(--go)}
+/* credentials modal */
 .ccm{max-width:400px}
 
 /* ── CONFIRM LOG MODAL ── */
@@ -639,7 +619,7 @@ input[type=date]{font-size:14px}
 .mni2{font-size:19px;line-height:1}
 .mnl{font-family:'JetBrains Mono';font-size:7px;letter-spacing:1px}
 
-/* ── VIEW MODE ── */
+/* ── VIEW MODE: hide manage-only items ── */
 .vm .wo{display:none}
 .vm [data-tab="log"]{display:none}
 
@@ -675,14 +655,8 @@ input[type=date]{font-size:14px}
 </head>
 <body>
 
-<!-- LOADING OVERLAY -->
-<div id="loadingOverlay">
-  <div class="spinner"></div>
-  <div class="loading-text">CONNECTING TO DATABASE</div>
-</div>
-
 <!-- ═══════════════ SPLASH ═══════════════ -->
-<div id="splash" style="display:none">
+<div id="splash">
   <div class="sdeco"></div>
   <div class="scourt"><span class="bir">🏸</span></div>
   <div class="slo">COURT POINTS</div>
@@ -722,7 +696,6 @@ input[type=date]{font-size:14px}
       <div class="hls">BADMINTON TRACKER</div>
     </div>
     <div class="hr2">
-      <span class="sync-dot" id="syncDot" title="Database sync status"></span>
       <button class="ibt" onclick="openRates()" aria-label="View rate card" title="Rate card">🏷️</button>
       <button class="ibt" onclick="toggleTheme()" id="themeBtn" aria-label="Toggle theme">☀️</button>
       <div class="ppill" id="poolPill">POOL LEFT<strong id="hdrPts">12,500 pts</strong></div>
@@ -828,7 +801,7 @@ input[type=date]{font-size:14px}
       </div>
     </div>
 
-  </div>
+  </div><!-- /mw -->
 
   <!-- MOBILE NAV -->
   <nav class="mnav" aria-label="Main navigation">
@@ -850,14 +823,15 @@ input[type=date]{font-size:14px}
       </button>
     </div>
   </nav>
-</div>
+</div><!-- /app -->
 
-<!-- RATE CARD MODAL -->
+<!-- ═══════════════ RATE CARD MODAL ═══════════════ -->
 <div class="mbg" id="rateModal" role="dialog" aria-modal="true" aria-labelledby="rateTitle" onclick="if(event.target===this)closeRates()">
   <div class="modal rm">
     <button class="mclose" onclick="closeRates()" aria-label="Close">✕</button>
     <div class="mti sm mti-blue" id="rateTitle">🏷️ Court Rate Card</div>
     <div class="msu">Points per hour · 1 pt = ₹0.80</div>
+
     <div class="rate-day">
       <div class="rate-day-title rday-green">🗓 Saturday</div>
       <table class="rate-tbl">
@@ -870,6 +844,7 @@ input[type=date]{font-size:14px}
         </tbody>
       </table>
     </div>
+
     <div class="rate-day">
       <div class="rate-day-title rday-blue">🗓 Sunday</div>
       <table class="rate-tbl">
@@ -883,6 +858,7 @@ input[type=date]{font-size:14px}
         </tbody>
       </table>
     </div>
+
     <div class="rate-day">
       <div class="rate-day-title rday-gold">🗓 Weekdays (Mon–Fri)</div>
       <table class="rate-tbl">
@@ -896,6 +872,7 @@ input[type=date]{font-size:14px}
         </tbody>
       </table>
     </div>
+
     <div class="rate-note">
       <strong>Pool:</strong> 12,500 pts total · 5 members × ₹2,000 each · Min booking: 300 pts (1hr weekday off-peak)
     </div>
@@ -972,79 +949,6 @@ input[type=date]{font-size:14px}
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<!-- ═══════════════ FIREBASE SDK ═══════════════ -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, onValue, set, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyB4grQh8o6mKiuu4Rf8385UtlWjI6SUUSY",
-  authDomain: "badminton-8166a.firebaseapp.com",
-  databaseURL: "https://badminton-8166a-default-rtdb.firebaseio.com",
-  projectId: "badminton-8166a",
-  storageBucket: "badminton-8166a.firebasestorage.app",
-  messagingSenderId: "125599917383",
-  appId: "1:125599917383:web:0c272c1c7072b49a1c1862",
-  measurementId: "G-RJ9NM4RLJ2"
-};
-
-const fbApp  = initializeApp(firebaseConfig);
-const db     = getDatabase(fbApp);
-const dbRef  = ref(db, 'courtpoints');
-
-/* ── expose write fn to global scope ── */
-window._fbSave = function(data) {
-  const dot = document.getElementById('syncDot');
-  dot.className = 'sync-dot syncing';
-  set(dbRef, data)
-    .then(()  => { dot.className = 'sync-dot'; })
-    .catch(()  => { dot.className = 'sync-dot error'; showToast('⚠ Sync error — check connection'); });
-};
-
-/* ── listen for real-time updates ── */
-onValue(dbRef, (snapshot) => {
-  const dot = document.getElementById('syncDot');
-  dot.className = 'sync-dot';
-
-  const val = snapshot.val();
-  if (val) {
-    DB = val;
-    // Ensure arrays exist
-    if (!DB.sessions)     DB.sessions     = [];
-    if (!DB.knownGuests)  DB.knownGuests  = [];
-    if (!DB.payments)     DB.payments     = {};
-  } else {
-    DB = { sessions: [], knownGuests: [], payments: {} };
-  }
-
-  // Hide loading, show splash on first load
-  const overlay = document.getElementById('loadingOverlay');
-  if (!overlay.classList.contains('hide')) {
-    overlay.classList.add('hide');
-    document.getElementById('splash').style.display = '';
-    applyTheme(localStorage.getItem('cp_theme') || 'dark');
-  }
-
-  // Re-render active tab if app is open
-  const app = document.getElementById('app');
-  if (app.classList.contains('open')) {
-    renderOV();
-    const activePanel = document.querySelector('.tp.active');
-    if (activePanel) {
-      const tabId = activePanel.id.replace('tab-', '');
-      ({ history: renderHist, guests: renderGL, settle: renderSettle }[tabId] || (() => {}))();
-    }
-  }
-}, (error) => {
-  // Firebase read error
-  document.getElementById('loadingOverlay').classList.add('hide');
-  document.getElementById('splash').style.display = '';
-  document.getElementById('syncDot').className = 'sync-dot error';
-  showToast('⚠ Could not connect to database');
-});
-
-</script>
-
 <script>
 /* ══════════════════════════════════════════
    CONSTANTS
@@ -1057,20 +961,6 @@ const MEMBERS = [
   {name:'Khushi',  color:'#ff9f3c'},
 ];
 const N = 5, TOTAL_PTS = 12500, PER_HEAD_PTS = 2500, PTS_RS = 0.8, MIN_BOOKING = 300;
-
-/* ══════════════════════════════════════════
-   DATABASE — now backed by Firebase
-   DB is populated by the onValue listener above.
-   saveDB() calls window._fbSave().
-══════════════════════════════════════════ */
-let DB = { sessions: [], knownGuests: [], payments: {} };
-
-function saveDB() {
-  if (window._fbSave) {
-    // Deep-clone to avoid Firebase issues with non-plain objects
-    window._fbSave(JSON.parse(JSON.stringify(DB)));
-  }
-}
 
 /* ══════════════════════════════════════════
    SCHEDULE
@@ -1116,7 +1006,17 @@ function fD(d){ return new Date(d+'T00:00:00').toLocaleDateString('en-IN',{day:'
 function R(n){ return Math.round(n); }
 
 /* ══════════════════════════════════════════
-   AUTH  (credentials stay local — intentional)
+   DATABASE
+══════════════════════════════════════════ */
+function loadDB(){
+  try{ return JSON.parse(localStorage.getItem('cp_db')||'null') || {sessions:[],knownGuests:[],payments:{}}; }
+  catch(e){ return {sessions:[],knownGuests:[],payments:{}}; }
+}
+function saveDB(){ localStorage.setItem('cp_db', JSON.stringify(DB)); }
+let DB = loadDB();
+
+/* ══════════════════════════════════════════
+   AUTH
 ══════════════════════════════════════════ */
 let CREDS = {id:'dewaang', pw:'1234'};
 try{ const c=JSON.parse(localStorage.getItem('cp_creds')); if(c&&c.id&&c.pw) CREDS=c; }catch(e){}
@@ -1156,6 +1056,7 @@ function goBack(){
   a.classList.remove('open','vm');
   isManage=false;
   document.getElementById('splash').style.display='';
+  // reset to overview tab for next entry
   showTabInternal('overview');
 }
 function openCC(){ document.getElementById('credsModal').classList.add('open'); }
@@ -1192,6 +1093,7 @@ function toggleTheme(){
   applyTheme(n);
   localStorage.setItem('cp_theme',n);
 }
+applyTheme(localStorage.getItem('cp_theme')||'dark');
 
 /* ══════════════════════════════════════════
    TABS
@@ -1258,6 +1160,7 @@ function renderCB(){
 
   const rem = remainingPts();
 
+  /* ─── HARD BLOCK: pool fully exhausted ─── */
   if(rem <= 0){
     disable('exhausted',
       '<div class="crow"><span class="big">🚫 POOL EXHAUSTED</span></div>' +
@@ -1275,6 +1178,7 @@ function renderCB(){
     ${ppl ? `<span class="pp2">÷${ppl} players = ₹${ppRs}/head</span>` : '<span class="warn">Select at least 1 player</span>'}
   </div><div class="cslot">${bkd}</div>`;
 
+  /* ─── HARD BLOCK: session would exceed pool ─── */
   if(res.total > rem){
     disable('exhausted',
       crowd +
@@ -1283,6 +1187,7 @@ function renderCB(){
     return;
   }
 
+  /* ─── OK ─── */
   box.className = 'cbox';
   box.innerHTML = crowd;
   btn.disabled = (ppl === 0);
@@ -1346,7 +1251,7 @@ function renderSGC(){
   });
   renderCB();
 }
-
+/* ── pending log data for confirm modal ── */
 let _pendingLog = null;
 
 function logSession(){
@@ -1356,9 +1261,11 @@ function logSession(){
   const res = cC(getSc(d),sh,eh);
   if(!res || selMem.size+sessGuests.length===0) return;
 
+  /* Hard cap check before showing confirm */
   const rem = remainingPts();
   if(res.total > rem){ showToast('⚠ Not enough pts! Only '+rem+' left.'); renderCB(); return; }
 
+  /* Build summary for confirm modal */
   const ppl = selMem.size + sessGuests.length;
   const ppRs = R((res.total/ppl)*PTS_RS);
   const bkd = res.det.map(x=>`${fH(x.f)}–${fH(x.t)}: ${x.pts}pts`).join(' · ');
@@ -1375,6 +1282,7 @@ function logSession(){
     <div class="cl-row"><span class="cl-total-lbl">TOTAL COST</span><span class="cl-total-val">${res.total} pts</span></div>
   `;
 
+  /* Stash for confirmLog() */
   _pendingLog = {d, sh, eh, res};
   document.getElementById('confirmModal').classList.add('open');
 }
@@ -1388,6 +1296,7 @@ function confirmLog(){
   if(!_pendingLog) return;
   const{d, sh, eh, res} = _pendingLog;
 
+  /* Final hard-cap double check */
   const rem = remainingPts();
   if(res.total > rem){ closeConfirm(); showToast('⚠ Not enough pts! Only '+rem+' left.'); renderCB(); return; }
 
@@ -1463,6 +1372,7 @@ function calcSettle(){
   const stats=getStats();
   const{totalGuestMoney,totalGuestPts,held,det,pending}=getGuestData();
   const guestPtsEach=totalGuestPts/N, guestMoneyEach=totalGuestMoney/N;
+  const totUsed=usedPts();
   const result={};
   MEMBERS.forEach(m=>{
     const used=stats[m.name].pts;
@@ -1476,7 +1386,7 @@ function calcSettle(){
       sessions:stats[m.name].sessions, det:stats[m.name].det
     };
   });
-  return{result,totalGuestMoney,totalGuestPts,guestPtsEach,guestMoneyEach,pending,det,totUsed:usedPts()};
+  return{result,totalGuestMoney,totalGuestPts,guestPtsEach,guestMoneyEach,pending,det,totUsed};
 }
 
 /* ══════════════════════════════════════════
