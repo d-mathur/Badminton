@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Court Points</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%2307090e'/%3E%3Cellipse cx='24' cy='22' rx='13' ry='10' fill='none' stroke='%23b8ff3c' stroke-width='3'/%3E%3Cellipse cx='24' cy='22' rx='8' ry='6' fill='none' stroke='%23b8ff3c' stroke-width='1.5' opacity='.5'/%3E%3Cline x1='24' y1='12' x2='24' y2='32' stroke='%23b8ff3c' stroke-width='1.5' opacity='.5'/%3E%3Cline x1='14' y1='22' x2='34' y2='22' stroke='%23b8ff3c' stroke-width='1.5' opacity='.5'/%3E%3Crect x='32' y='28' width='4' height='18' rx='2' fill='%23ffcc44' transform='rotate(35 34 37)'/%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* ── TOKENS ── */
@@ -572,6 +573,22 @@ input[type=date]{font-size:14px}
 /* credentials modal */
 .ccm{max-width:400px}
 
+/* ── CONFIRM LOG MODAL ── */
+.clm{max-width:420px}
+.cl-summary{background:var(--s2);border:1px solid var(--bo);border-radius:12px;padding:16px 18px;margin-bottom:18px}
+.cl-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px dashed var(--bo);font-family:'JetBrains Mono';font-size:11px}
+.cl-row:last-child{border-bottom:none;padding-top:10px;margin-top:4px;border-top:2px solid var(--b2)}
+.cl-lbl{color:var(--m3)}
+.cl-val{font-weight:600;color:var(--tx)}
+.cl-total-lbl{font-family:'Bebas Neue';font-size:16px;letter-spacing:2px;color:var(--tx)}
+.cl-total-val{font-family:'Bebas Neue';font-size:28px;color:var(--a)}
+.cl-players{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.cl-btns{display:flex;gap:10px}
+.cl-cancel{flex:1;background:transparent;border:1.5px solid var(--b2);color:var(--m3);border-radius:10px;padding:12px;font-family:'Outfit';font-size:14px;cursor:pointer;transition:all .15s;touch-action:manipulation;}
+.cl-cancel:hover{border-color:var(--a3);color:var(--a3)}
+.cl-confirm{flex:2;background:var(--a);color:#07090e;border:none;border-radius:10px;padding:12px;font-family:'Bebas Neue';font-size:20px;letter-spacing:2px;cursor:pointer;touch-action:manipulation;}
+.cl-confirm:hover{opacity:.88}
+
 /* ── TOAST ── */
 .toast{
   position:fixed;
@@ -683,7 +700,7 @@ input[type=date]{font-size:14px}
       <button class="ibt" onclick="toggleTheme()" id="themeBtn" aria-label="Toggle theme">☀️</button>
       <div class="ppill" id="poolPill">POOL LEFT<strong id="hdrPts">12,500 pts</strong></div>
       <button class="cbt wo" onclick="openCC()">⚙ CREDS</button>
-      <button class="lout wo" onclick="goBack()">← EXIT</button>
+      <button class="lout" onclick="goBack()">← EXIT</button>
     </div>
   </header>
 
@@ -858,6 +875,20 @@ input[type=date]{font-size:14px}
 
     <div class="rate-note">
       <strong>Pool:</strong> 12,500 pts total · 5 members × ₹2,000 each · Min booking: 300 pts (1hr weekday off-peak)
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM LOG MODAL -->
+<div class="mbg" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" onclick="if(event.target===this)closeConfirm()">
+  <div class="modal clm">
+    <button class="mclose" onclick="closeConfirm()" aria-label="Close">✕</button>
+    <div class="mti sm mti-green" id="confirmTitle">✅ Confirm Session</div>
+    <div class="msu" id="confirmSub"></div>
+    <div class="cl-summary" id="confirmSummary"></div>
+    <div class="cl-btns">
+      <button class="cl-cancel" onclick="closeConfirm()">Cancel</button>
+      <button class="cl-confirm" onclick="confirmLog()">LOG IT ✓</button>
     </div>
   </div>
 </div>
@@ -1220,6 +1251,9 @@ function renderSGC(){
   });
   renderCB();
 }
+/* ── pending log data for confirm modal ── */
+let _pendingLog = null;
+
 function logSession(){
   const d  = document.getElementById('fDate').value;
   const sh = parseInt(document.getElementById('fStart').value);
@@ -1227,9 +1261,44 @@ function logSession(){
   const res = cC(getSc(d),sh,eh);
   if(!res || selMem.size+sessGuests.length===0) return;
 
-  /* Double-check the hard cap server-side style */
+  /* Hard cap check before showing confirm */
   const rem = remainingPts();
   if(res.total > rem){ showToast('⚠ Not enough pts! Only '+rem+' left.'); renderCB(); return; }
+
+  /* Build summary for confirm modal */
+  const ppl = selMem.size + sessGuests.length;
+  const ppRs = R((res.total/ppl)*PTS_RS);
+  const bkd = res.det.map(x=>`${fH(x.f)}–${fH(x.t)}: ${x.pts}pts`).join(' · ');
+  const memberBadges = [...selMem].map(n=>`<span class="badge" style="color:${MEMBERS.find(m=>m.name===n).color}">${n}</span>`).join('');
+  const guestBadges  = sessGuests.map(g=>`<span class="badge ge">👤 ${g.name}</span>`).join('');
+
+  document.getElementById('confirmSub').textContent = `${fD(d)} · ${fH(sh)}–${fH(eh)} · ${eh-sh}hr`;
+  document.getElementById('confirmSummary').innerHTML = `
+    <div class="cl-row"><span class="cl-lbl">Date</span><span class="cl-val">${fD(d)}</span></div>
+    <div class="cl-row"><span class="cl-lbl">Time</span><span class="cl-val">${fH(sh)} – ${fH(eh)} (${eh-sh}hr)</span></div>
+    <div class="cl-row"><span class="cl-lbl">Slots</span><span class="cl-val" style="font-size:10px;text-align:right;max-width:220px">${bkd}</span></div>
+    <div class="cl-row"><span class="cl-lbl">Players (${ppl})</span><span class="cl-players">${memberBadges}${guestBadges}</span></div>
+    <div class="cl-row"><span class="cl-lbl">Per head</span><span class="cl-val">₹${ppRs}</span></div>
+    <div class="cl-row"><span class="cl-total-lbl">TOTAL COST</span><span class="cl-total-val">${res.total} pts</span></div>
+  `;
+
+  /* Stash for confirmLog() */
+  _pendingLog = {d, sh, eh, res};
+  document.getElementById('confirmModal').classList.add('open');
+}
+
+function closeConfirm(){
+  document.getElementById('confirmModal').classList.remove('open');
+  _pendingLog = null;
+}
+
+function confirmLog(){
+  if(!_pendingLog) return;
+  const{d, sh, eh, res} = _pendingLog;
+
+  /* Final hard-cap double check */
+  const rem = remainingPts();
+  if(res.total > rem){ closeConfirm(); showToast('⚠ Not enough pts! Only '+rem+' left.'); renderCB(); return; }
 
   sessGuests.forEach(g=>{ if(!DB.knownGuests.includes(g.name)) DB.knownGuests.push(g.name); });
   DB.sessions.unshift({
@@ -1239,9 +1308,11 @@ function logSession(){
     guests:sessGuests.map(g=>({...g}))
   });
   saveDB();
+  _pendingLog = null;
   sessGuests=[];
+  closeConfirm();
   renderSGC(); renderKC(); renderCB(); renderOV();
-  showToast(`Logged — ${res.total} pts`);
+  showToast(`✅ Logged — ${res.total} pts`);
 }
 
 /* ══════════════════════════════════════════
@@ -1439,9 +1510,10 @@ function openPT(sid,gn,rs){
 function closePT(){ document.getElementById('payToModal').classList.remove('open'); _ptc=null; }
 function confirmPT(name){
   if(!_ptc) return;
+  const rs = _ptc.rs;
   DB.payments[_ptc.sid+':'+_ptc.gn]={receivedBy:name};
   saveDB(); closePT(); renderGL();
-  showToast(`₹${_ptc.rs} recorded → ${name}`);
+  showToast(`₹${rs} recorded → ${name}`);
 }
 function unPay(sid,gn){ delete DB.payments[sid+':'+gn]; saveDB(); renderGL(); showToast('Payment unmarked'); }
 
@@ -1618,8 +1690,9 @@ function showToast(msg){
 ══════════════════════════════════════════ */
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){
-    ['rateModal','payToModal','memberModal','finalModal','credsModal']
+    ['confirmModal','rateModal','payToModal','memberModal','finalModal','credsModal']
       .forEach(id=>document.getElementById(id).classList.remove('open'));
+    _pendingLog = null;
   }
 });
 
