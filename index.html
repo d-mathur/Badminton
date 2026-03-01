@@ -1006,13 +1006,26 @@ onValue(dbRef, (snapshot) => {
   const dot = document.getElementById('syncDot');
   dot.className = 'sync-dot';
 
+  // Firebase sometimes converts arrays to {0:x,1:y} objects — convert back to real arrays
+  const toArr = v => {
+    if (!v) return [];
+    if (Array.isArray(v)) return v;
+    return Object.keys(v).sort((a,b) => Number(a)-Number(b)).map(k => v[k]);
+  };
+
   const val = snapshot.val();
   if (val) {
     DB = val;
-    // Ensure arrays exist
-    if (!DB.sessions)     DB.sessions     = [];
-    if (!DB.knownGuests)  DB.knownGuests  = [];
-    if (!DB.payments)     DB.payments     = {};
+    if (!DB.payments) DB.payments = {};
+    // Normalize all arrays (Firebase strips empty arrays and converts arrays to objects)
+    DB.sessions    = toArr(DB.sessions);
+    DB.knownGuests = toArr(DB.knownGuests);
+    DB.sessions    = DB.sessions.map(s => ({
+      ...s,
+      members: toArr(s.members),
+      guests:  toArr(s.guests),
+      det:     toArr(s.det),
+    }));
   } else {
     DB = { sessions: [], knownGuests: [], payments: {} };
   }
